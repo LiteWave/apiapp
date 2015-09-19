@@ -1,0 +1,27 @@
+{
+    "xxxxdb": "mongodb://10.182.7.164/lwserver",
+    "db": "mongodb://localhost/lwserver",
+    "app": {
+        "name": "LiteWave Server"
+    },
+    "facebook": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:3000/auth/facebook/callback"
+    },
+    "twitter": {
+        "clientID": "CONSUMER_KEY",
+        "clientSecret": "CONSUMER_SECRET",
+        "callbackURL": "http://localhost:3000/auth/twitter/callback"
+    },
+    "github": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:3000/auth/github/callback"
+    },
+    "google": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:3000/auth/google/callback"
+    }
+}
