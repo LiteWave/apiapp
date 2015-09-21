@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{E208DC1C-830D-405C-B482-645422A02019}"
+	ProjectSection(SolutionItems) = preProject
+		server\server.js = server\server.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{771D3988-3065-4997-A3D1-BF80E457753C}"
+	ProjectSection(SolutionItems) = preProject
+		server\config\config.js = server\config\config.js
+		server\config\deploy.rb = server\config\deploy.rb
+		server\config\express.js = server\config\express.js
+		server\config\passport.js = server\config\passport.js
+		server\config\routes.js = server\config\routes.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "controllers", "controllers", "{7F7B77CA-D248-4923-BB33-4BE4B919E484}"
+	ProjectSection(SolutionItems) = preProject
+		server\controllers\clients.js = server\controllers\clients.js
+		server\controllers\event_joins.js = server\controllers\event_joins.js
+		server\controllers\events.js = server\controllers\events.js
+		server\controllers\index.js = server\controllers\index.js
+		server\controllers\levels.js = server\controllers\levels.js
+		server\controllers\liteshows.js = server\controllers\liteshows.js
+		server\controllers\logicallayouts.js = server\controllers\logicallayouts.js
+		server\controllers\showcommands.js = server\controllers\showcommands.js
+		server\controllers\shows.js = server\controllers\shows.js
+		server\controllers\stadiums.js = server\controllers\stadiums.js
+		server\controllers\user_locations.js = server\controllers\user_locations.js
+		server\controllers\users.js = server\controllers\users.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5E1142F4-0F37-4A48-8D8E-D2DAF85AFF19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "models", "models", "{9E265846-1E9D-4268-86EB-8C65183BC108}"
+	ProjectSection(SolutionItems) = preProject
+		server\models\client.js = server\models\client.js
+		server\models\command.js = server\models\command.js
+		server\models\event.js = server\models\event.js
+		server\models\event_join.js = server\models\event_join.js
+		server\models\level.js = server\models\level.js
+		server\models\logicallayout.js = server\models\logicallayout.js
+		server\models\show.js = server\models\show.js
+		server\models\showcommand.js = server\models\showcommand.js
+		server\models\stadium.js = server\models\stadium.js
+		server\models\user.js = server\models\user.js
+		server\models\user_location.js = server\models\user_location.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "views", "views", "{1237FF9B-DDF1-4CF0-8B37-53CC2961AFE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F25A58D5-5AF3-4047-B271-780CD4F73971}"
+	ProjectSection(SolutionItems) = preProject
+		package.json = package.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{4110387A-52E4-41C9-8DFB-E40BB76FB948}"
+	ProjectSection(SolutionItems) = preProject
+		server\config\deploy\production.rb = server\config\deploy\production.rb
+		server\config\deploy\staging.rb = server\config\deploy\staging.rb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "env", "env", "{DEA32370-8B27-49A6-A9D4-2F1661E92265}"
+	ProjectSection(SolutionItems) = preProject
+		server\config\env\all.js = server\config\env\all.js
+		server\config\env\development.json = server\config\env\development.json
+		server\config\env\production.json = server\config\env\production.json
+		server\config\env\test.json = server\config\env\test.json
+		server\config\env\travis.json = server\config\env\travis.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "middlewares", "middlewares", "{FA2B832D-43D7-4C8F-BFC9-80C562E75400}"
+	ProjectSection(SolutionItems) = preProject
+		server\config\middlewares\authorization.js = server\config\middlewares\authorization.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{771D3988-3065-4997-A3D1-BF80E457753C} = {E208DC1C-830D-405C-B482-645422A02019}
+		{7F7B77CA-D248-4923-BB33-4BE4B919E484} = {E208DC1C-830D-405C-B482-645422A02019}
+		{5E1142F4-0F37-4A48-8D8E-D2DAF85AFF19} = {E208DC1C-830D-405C-B482-645422A02019}
+		{9E265846-1E9D-4268-86EB-8C65183BC108} = {E208DC1C-830D-405C-B482-645422A02019}
+		{1237FF9B-DDF1-4CF0-8B37-53CC2961AFE0} = {E208DC1C-830D-405C-B482-645422A02019}
+		{4110387A-52E4-41C9-8DFB-E40BB76FB948} = {771D3988-3065-4997-A3D1-BF80E457753C}
+		{DEA32370-8B27-49A6-A9D4-2F1661E92265} = {771D3988-3065-4997-A3D1-BF80E457753C}
+		{FA2B832D-43D7-4C8F-BFC9-80C562E75400} = {771D3988-3065-4997-A3D1-BF80E457753C}
+	EndGlobalSection
+EndGlobal
