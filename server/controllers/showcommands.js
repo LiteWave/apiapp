@@ -18,7 +18,7 @@ exports.showcommand = function (req, res, next, id)
     console.log('ShowCommands:showcommand:err=' + err);
     if (err) return next(err);
     if (!sc) return next(new Error('Failed to load show ' + id));
-    console.log('ShowCommands:showcommand::' + sc);
+    //console.log('ShowCommands:showcommand::' + sc);
     req.showcommand = sc;
     next();
   });

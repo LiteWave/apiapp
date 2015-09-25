@@ -36,6 +36,7 @@ exports.create = function (req, res)
   var curTime = new Date();
   console.log('EJ:Create. Server curTime initial:' + curTime);
   var curUTCTime = curTime.getTime() - (curTime.getTimezoneOffset() * 60000);  // convert to GMT time offset
+  console.log('EJ:Create. Server curUTCTime:' + curUTCTime);
 
   //  we are seeing if the time that the mobile app has is different than the server.  The problem is that the time to post
   //   to the server is different depending on the phone, so the time offset is actually varied enough due to this posting that
@@ -51,13 +52,8 @@ exports.create = function (req, res)
     var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
     mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
 
-    console.log('EJ:Create. mobile_time_offset:' + (mobile_time_offset / 60000));
+    console.log('EJ:Create. mobile_time_offset:' + mobile_time_offset);
     console.log('EJ:Create. Mobile Time:' + mobile_date);
-
-    if (mobile_time_offset < 10)
-    {
-      mobile_time_offset = 0;
-    }
   }
 
   // I'm thinking that if they already joined, then we delete the first join and create the new one.  That will help me out
@@ -102,6 +98,7 @@ exports.create = function (req, res)
         {
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = mobile_time_offset;
+          console.log('EJ:Create. mobile_time_offset2:' + (mobile_time_offset / 60000));
           event_join._user_location_Id = req.user_location._id;
           event_join._showId = show._id;
 
@@ -159,6 +156,9 @@ exports.create = function (req, res)
 
             // use the offset to set the time for this phone to start
             event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() - event_join.mobileTimeOffset));
+            console.log('EJ:Create. event_join.mobileStartAt:' + event_join.mobileStartAt);
+            console.log('EJ:Create. event_join.mobileTimeOffset3:' + event_join.mobileTimeOffset);
+            console.log('EJ:Create. show.startAt:' + show.startAt);
 
             event_join.save(function (err)
             {
