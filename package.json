@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "time-grunt": "~0.2.1",
-    "requirejs": "~2.1.9",
+    "requirejs": "~2.1.9"
   },
   "engines": {
     "node": ">=0.8.0"
