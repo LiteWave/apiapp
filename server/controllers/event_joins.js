@@ -50,17 +50,17 @@ exports.create = function (req, res)
   {
     var mobile_date = new Date(req.body.mobileTime);
     var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
-    //mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
-    mobile_time_offset = mobile_date.getTime() - curUTCTime;
+    mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
+    //mobile_time_offset = mobile_date.getTime() - curUTCTime;
 
     console.log('EJ:Create. mobile_timezone_offset:' + mobile_timezone_offset);
     console.log('EJ:Create. mobile_time_offset:' + mobile_time_offset);
     console.log('EJ:Create. Mobile Time:' + mobile_date);
 
-   /*if (mobile_time_offset < 10)
+   if (mobile_time_offset < 1)
     {
       mobile_time_offset = 0;
-    }*/
+    }
   }
 
   // I'm thinking that if they already joined, then we delete the first join and create the new one.  That will help me out
