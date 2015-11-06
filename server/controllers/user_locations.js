@@ -92,6 +92,36 @@ exports.create = function (req, res)
         this.logicalRow = 1;
       }
 
+      //  we are seeing if the time that the mobile app has is different than the server.  The problem is that the time to post
+      //   to the server is different depending on the phone, so the time offset is actually varied enough due to this posting that
+      //   it makes the show visibly inaccurate.   Assuming all cell phones have the same time, then really what we are trying to 
+      //    accomplish here is to take into account phones that are in different time zones, so if the calculated offset is less than 1 
+      //    second, we set the offset to 0.  If some day we have a better way to deal with these offsets, then we can do it here.
+      var mobile_time_offset = 0;
+      if (req.body.mobileTime)
+      {
+        var curTime = new Date();
+        console.log('UL:Create. Server curTime initial:' + curTime);
+        var curUTCTime = curTime.getTime() - (curTime.getTimezoneOffset() * 60000);  // convert to GMT time offset
+        console.log('UL:Create. Server curUTCTime:' + curUTCTime);
+
+        var mobile_date = new Date(req.body.mobileTime);
+        var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
+        mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
+        //mobile_time_offset = mobile_date.getTime() - curUTCTime;
+
+        console.log('UL:Create. mobile_timezone_offset:' + mobile_timezone_offset);
+        console.log('UL:Create. mobile_time_offset:' + mobile_time_offset);
+        console.log('UL:Create. Mobile Time:' + mobile_date);
+
+        user_location.mobileTimeOffset = mobile_time_offset;
+
+        if (mobile_time_offset < 1)
+        {
+          mobile_time_offset = 0;
+        }
+      }
+
       user_location.save(function (err, UL)
       {
         if (err)

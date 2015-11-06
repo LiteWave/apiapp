@@ -18,7 +18,8 @@ var UserLocationSchema = new Schema({
     seat: String
   },
   logicalRow: Number,
-  logicalCol: Number
+  logicalCol: Number,
+  mobileTimeOffset: Number,  // the difference in ms between the passed in mobile time and the server time (used for info only)
 });
 
 /**
