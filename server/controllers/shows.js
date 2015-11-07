@@ -97,6 +97,7 @@ exports.getshow = function (req, res)
  */
 exports.all = function (req, res)
 {
+  //Show.find({ _eventId: req.event._id, startAt: { $ne: null } }).exec(function (err, shows)
   Show.find({ _eventId: req.event._id }).exec(function (err, shows)
   {
     if (err)

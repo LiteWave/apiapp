@@ -90,14 +90,15 @@ exports.create = function (req, res)
           }
 
           // Pick a winner if we don't have one.
-          /*if (!show._winnerId)
+          if (!show._winnerId)
           {
+            // TODO handle multiple sections.
             if ((UL.userSeat.section.indexOf(show.winnerSections.toString()) > -1))
             {
               // Set the first person to join from the winning section as the winner.
               show._winnerId = UL._id;
             }
-          }*/
+          }
 
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
