@@ -18,6 +18,7 @@ var ClientSchema = new Schema({
     borderColor: { type: String, trim: true },
     logoUrl: String,
     highlightColor: { type: String, trim: true },
+    pollingInterval: Number,  // in ms
     retryCount: Number,
     textColor: { type: String, trim: true },
     textSelectedColor: { type: String, trim: true }
