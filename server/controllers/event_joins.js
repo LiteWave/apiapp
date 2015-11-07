@@ -89,18 +89,13 @@ exports.create = function (req, res)
             return;
           }
 
-          // We have a show, get the winningSections list, get the count of UL's that are in the Section.
-          // pick a random number between 0 and less than half of that count. The person that matches that EJ count is selected as the winner.
-          // Rely on winnerIndex for now.
+          // Pick a winner if we don't have one.
           /*if (!show._winnerId)
           {
             if ((UL.userSeat.section.indexOf(show.winnerSections.toString()) > -1))
             {
-              if (show.winnerIndex == currentIndex) // UL currentIndex
-              {
-                // Set this UL (currently creating EJ) as winner.
-                show._winnerId = UL._id;
-              }
+              // Set the first person to join from the winning section as the winner.
+              show._winnerId = UL._id;
             }
           }*/
 
@@ -147,7 +142,7 @@ exports.create = function (req, res)
             console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
 
             // use the offset to set the time for this phone to start
-            event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() - event_join.mobileTimeOffset));
+            event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
             console.log('EJ:Create. event_join.mobileStartAt:' + event_join.mobileStartAt);
             console.log('EJ:Create. show.startAt:' + show.startAt);
 

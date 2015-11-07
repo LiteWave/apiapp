@@ -107,7 +107,7 @@ exports.create = function (req, res)
 
         var mobile_date = new Date(req.body.mobileTime);
         var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
-        mobile_time_offset = curUTCTime - mobile_date.getTime() - mobile_timezone_offset;
+        mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
         //mobile_time_offset = mobile_date.getTime() - curUTCTime;
 
         console.log('UL:Create. mobile_timezone_offset:' + mobile_timezone_offset);
