@@ -89,6 +89,21 @@ exports.create = function (req, res)
             return;
           }
 
+          // We have a show, get the winningSections list, get the count of UL's that are in the Section.
+          // pick a random number between 0 and less than half of that count. The person that matches that EJ count is selected as the winner.
+          // Rely on winnerIndex for now.
+          /*if (!show._winnerId)
+          {
+            if ((UL.userSeat.section.indexOf(show.winnerSections.toString()) > -1))
+            {
+              if (show.winnerIndex == currentIndex) // UL currentIndex
+              {
+                // Set this UL (currently creating EJ) as winner.
+                show._winnerId = UL._id;
+              }
+            }
+          }*/
+
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
           console.log('EJ:Create. event_join.mobileTimeOffset:' + event_join.mobileTimeOffset);
