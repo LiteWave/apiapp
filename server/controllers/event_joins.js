@@ -138,6 +138,7 @@ exports.create = function (req, res)
 
             // retrieve the commands for this user based on their logical row or col. Only col for now.
             event_join.commands = logicalCmd.commandList;
+            event_join._winnerId = null;
             event_join._winnerId = !!(show._winnerId) ? show._winnerId : null;
 
             console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
