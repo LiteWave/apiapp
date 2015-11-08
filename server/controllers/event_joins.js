@@ -90,7 +90,7 @@ exports.create = function (req, res)
           }
 
           // Pick a winner if we don't have one.
-          if (!show._winnerId)
+          /*if (!show._winnerId)
           {
             // TODO handle multiple sections.
             if ((UL.userSeat.section.indexOf(show.winnerSections.toString()) > -1))
@@ -98,7 +98,7 @@ exports.create = function (req, res)
               // Set the first person to join from the winning section as the winner.
               show._winnerId = UL._id;
             }
-          }
+          }*/
 
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
@@ -138,8 +138,9 @@ exports.create = function (req, res)
 
             // retrieve the commands for this user based on their logical row or col. Only col for now.
             event_join.commands = logicalCmd.commandList;
-            event_join._winnerId = null;
-            event_join._winnerId = !!(show._winnerId) ? show._winnerId : null;
+            //event_join._winnerId = null;
+            //event_join._winnerId = !!(show._winnerId) ? show._winnerId : null;
+            event_join._winnerId = show._winnerId;
 
             console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
 
