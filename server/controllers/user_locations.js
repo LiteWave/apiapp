@@ -115,11 +115,6 @@ exports.create = function (req, res)
         console.log('UL:Create. Mobile Time:' + mobile_date);
 
         user_location.mobileTimeOffset = mobile_time_offset;
-
-        if (mobile_time_offset < 1)
-        {
-          mobile_time_offset = 0;
-        }
       }
 
       user_location.save(function (err, UL)
