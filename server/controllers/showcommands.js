@@ -12,10 +12,10 @@ var mongoose = require('mongoose'),
  */
 exports.showcommand = function (req, res, next, id)
 {
-  console.log('ShowCommands:showcommand:id=' + id);
+  //console.log('ShowCommands:showcommand:id=' + id);
   ShowCommand.load(id, function (err, sc)
   {
-    console.log('ShowCommands:showcommand:err=' + err);
+    //console.log('ShowCommands:showcommand:err=' + err);
     if (err) return next(err);
     if (!sc) return next(new Error('Failed to load show ' + id));
     //console.log('ShowCommands:showcommand::' + sc);
@@ -29,7 +29,7 @@ exports.showcommand = function (req, res, next, id)
  */
 exports.show = function (req, res)
 {
-  console.log('ShowCommands:show::');
+  //console.log('ShowCommands:show::');
   res.jsonp(req.showcommand);
 };
 
@@ -40,7 +40,7 @@ exports.create = function (req, res)
 {
   var showCommand = new ShowCommand(req.body);
   showCommand._showId = req.params.showId;
-  console.log('ShowCommand:Create:clientId=' + showCommand._showId);
+  //console.log('ShowCommand:Create:clientId=' + showCommand._showId);
 
   showCommand.save(function (err)
   {
@@ -62,7 +62,7 @@ exports.create = function (req, res)
  */
 exports.update = function (req, res)
 {
-  console.log('ShowCommand:Update:req=' + req);
+  //console.log('ShowCommand:Update:req=' + req);
   var showCommand = req.showCommand;
   showCommand = _.extend(showCommand, req.body);
   showCommand.save(function (err)
@@ -97,7 +97,7 @@ exports.destroy = function (req, res)
  */
 exports.all = function (req, res)
 {
-  console.log('ShowCommands:all');
+  //console.log('ShowCommands:all');
   //ShowCommand.find({ _showCommandId: req.showCommandId._id }).exec(function (err, showCommands)
   ShowCommand.find().exec(function (err, showCommands)
   {

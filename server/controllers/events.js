@@ -26,15 +26,15 @@ exports.event = function (req, res, next, id)
 exports.create = function (req, res)
 {
   var clientId = req.params.clientId;
-  console.log('Event:Create:clientId=' + clientId);
+  //console.log('Event:Create:clientId=' + clientId);
   var event = new Event(req.body);
   event._clientId = clientId;
-  console.log('Event:Create:Event=' + event);
-  console.log('Event:Create:clientId=' + event._clientId);
+  //console.log('Event:Create:Event=' + event);
+  //console.log('Event:Create:clientId=' + event._clientId);
 
   event.save(function (err)
   {
-console.log('Event:Create:err:' + err);
+    //console.log('Event:Create:err:' + err);
     if (err)
     {
       return res.send('clients/', {
@@ -53,7 +53,7 @@ console.log('Event:Create:err:' + err);
  */
 exports.update = function (req, res)
 {
-  console.log('EVENT:Update:req=' + req);
+  //console.log('EVENT:Update:req=' + req);
   var event = req.event;
   event = _.extend(event, req.body);
   event.save(function (err)

@@ -27,7 +27,7 @@ exports.stadium = function (req, res, next, id)
 exports.create = function (req, res)
 {
   var stadium = new Stadium(req.body);
-  console.log('Stadium:Create:stadium.name=' + stadium.name);
+  //console.log('Stadium:Create:stadium.name=' + stadium.name);
 
   stadium.save(function (err)
   {

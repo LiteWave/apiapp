@@ -36,7 +36,7 @@ ShowSchema.statics = {
   {
     var utc = new Date().toISOString();
 
-    console.log('EJ:Create. Server utc ' + utc);
+    //console.log('EJ:Create. Server utc ' + utc);
 
     this
     .findOne({ _eventId: event_id })

@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
  */
 exports.show = function (req, res, next, id)
 {
-  console.log('SHOW:Show:id=' + id);
+  //console.log('SHOW:Show:id=' + id);
   Show.load(id, function (err, show)
   {
     if (err) return next(err);
@@ -29,8 +29,8 @@ exports.create = function (req, res)
 {
   var show = new Show(req.body);
   show._eventId = req.params.eventId;
-  console.log('SHOW:Create:clientId=' + show._eventId);
-  console.log('SHOW:Create:req.body=' + req.body);
+  //console.log('SHOW:Create:clientId=' + show._eventId);
+  //console.log('SHOW:Create:req.body=' + req.body);
   show.save(function (err)
   {
     if (err)
@@ -52,7 +52,7 @@ exports.create = function (req, res)
  */
 exports.update = function (req, res)
 {
-  console.log('SHOW:Update:req=' + req);
+  //console.log('SHOW:Update:req=' + req);
   var show = req.show;
   show = _.extend(show, req.body);
   show.save(function (err)
@@ -88,7 +88,7 @@ exports.destroy = function (req, res)
  */
 exports.getshow = function (req, res)
 {
-  console.log('SHOW:GetShow:req.params.showId=');
+  //console.log('SHOW:GetShow:req.params.showId=');
   res.jsonp(req.show);
 };
 

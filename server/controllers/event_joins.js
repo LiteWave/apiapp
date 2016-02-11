@@ -16,7 +16,7 @@ exports.event_join = function (req, res, next, id)
 {
   EventJoin.load(id, function (err, event_join)
   {
-    console.log('in event_join constr');
+    //console.log('in event_join constr');
     // don't know this was doing.
     //EventJoin.findOne({ _id: req.params.event_joinId }).populate('_user_location_Id').exec(function (err, event_joint) {
     //console.log(err);
@@ -60,7 +60,7 @@ exports.create = function (req, res)
     {      
       if (!show)
       {
-        console.log('error, event liteshow is null');
+        //console.log('error, event liteshow is null');
         console.log(err);
         res.status(404);
         res.send({ error: 'show not available' });
@@ -68,8 +68,8 @@ exports.create = function (req, res)
       }
       else
       {
-        console.log('EJ. show:startAt:' + show.startAt);
-        console.log('EJ:trying to create the EJ');
+        //console.log('EJ. show:startAt:' + show.startAt);
+        //console.log('EJ:trying to create the EJ');
 
         UserLocation.findOne({ _eventId: req.user_location._eventId, _id: requestUserLocationId }, function (err, UL)
         {
@@ -102,7 +102,7 @@ exports.create = function (req, res)
 
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
-          console.log('EJ:Create. event_join.mobileTimeOffset:' + event_join.mobileTimeOffset);
+          //console.log('EJ:Create. event_join.mobileTimeOffset:' + event_join.mobileTimeOffset);
           event_join._user_location_Id = req.user_location._id;
           event_join._showId = show._id;
 
@@ -141,12 +141,12 @@ exports.create = function (req, res)
             event_join._winnerId = null;
             event_join._winnerId = !!(show._winnerId) ? show._winnerId : null;
 
-            console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
+            //console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
 
             // use the offset to set the time for this phone to start
             event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
-            console.log('EJ:Create. event_join.mobileStartAt:' + event_join.mobileStartAt);
-            console.log('EJ:Create. show.startAt:' + show.startAt);
+            //console.log('EJ:Create. event_join.mobileStartAt:' + event_join.mobileStartAt);
+            //console.log('EJ:Create. show.startAt:' + show.startAt);
 
             event_join.save(function (err)
             {

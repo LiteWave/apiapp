@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
  */
 exports.logicallayout = function (req, res, next, id)
 {
-  console.log('LogicalLayout:LogicalLayout:id=' + id);
+  //console.log('LogicalLayout:LogicalLayout:id=' + id);
   LogicalLayout.load(id, function (err, logicallayout)
   {
     if (err) return next(err);
@@ -28,8 +28,8 @@ exports.create = function (req, res)
 {
   var logicallayout = new LogicalLayout(req.body);
   logicallayout._eventId = req.params.eventId;
-  console.log('LogicalLayout:Create:eventId=' + logicallayout._eventId);
-  console.log('LogicalLayout:Create:req.body=' + req.body);
+  //console.log('LogicalLayout:Create:eventId=' + logicallayout._eventId);
+  //console.log('LogicalLayout:Create:req.body=' + req.body);
   logicallayout.save(function (err)
   {
     if (err)
@@ -51,7 +51,7 @@ exports.create = function (req, res)
  */
 exports.update = function (req, res)
 {
-  console.log('LogicalLayout:Update:req=' + req);
+  //console.log('LogicalLayout:Update:req=' + req);
   var logicallayout = req.logicallayout;
   logicallayout = _.extend(logicallayout, req.body);
   logicallayout.save(function (err)
@@ -95,7 +95,7 @@ exports.show = function (req, res)
  */
 exports.all = function (req, res)
 {
-  console.log('LogicalLayout:all:req.params.eventId=' + req.event._id);
+  //console.log('LogicalLayout:all:req.params.eventId=' + req.event._id);
   LogicalLayout.find({ _eventId: req.event._id }).exec(function (err, logicallayouts)
   {
     if (err)
