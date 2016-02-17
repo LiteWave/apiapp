@@ -7,6 +7,10 @@ var mongoose = require('mongoose'),
     Stadium = mongoose.model('Stadium'),
     _ = require('underscore');
 
+    // Declare global var.
+    levelCache = require('node-cache');
+    levelCacheTimeInMs = 60000;
+
 /**
  * Find stadium by id
  */
@@ -141,6 +145,19 @@ exports.showbylevel = function (req, res)
           }  
         }
 
+        var level = levelCache.get(levelId);
+        // console.log('ShowByLevel:level. value in cache was:' + level);
+        if (level)
+        {
+          console.log('ShowByLevel:level. Level found in cache.');
+          res.jsonp(level);
+          return;
+        }
+        else
+        {
+          console.log('ShowByLevel:level. Level NOT found in cache.');
+        }
+
         //console.log('ShowByLevel:level.levels=' + stadium.levels);
 
         Level.findOne({ _id: levelId }).exec(function (err, level)
@@ -151,8 +168,10 @@ exports.showbylevel = function (req, res)
               status: 404
             });
           }
-
-          //console.log('ShowByLevel:level=' + level);
+          
+          levelCache.put(levelId, level, levelCacheTimeInMs);
+          //var cachedLevel = levelCache.get("foo");
+          //console.log('ShowByLevel:cachedLevel=' + cachedLevel);
 
           res.jsonp(level);
         });
