@@ -145,8 +145,8 @@ exports.showbylevel = function (req, res)
           }  
         }
 
+        // Do we already have this level in our memory cache?
         var level = levelCache.get(levelId);
-        // console.log('ShowByLevel:level. value in cache was:' + level);
         if (level)
         {
           console.log('ShowByLevel:level. Level found in cache.');
@@ -168,10 +168,9 @@ exports.showbylevel = function (req, res)
               status: 404
             });
           }
-          
+
+          // Save this level by its _id to the memory cache.          
           levelCache.put(levelId, level, levelCacheTimeInMs);
-          //var cachedLevel = levelCache.get("foo");
-          //console.log('ShowByLevel:cachedLevel=' + cachedLevel);
 
           res.jsonp(level);
         });
