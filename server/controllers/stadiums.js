@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
     _ = require('underscore');
 
     // Declare global var.
-    levelCache = require('node-cache');
+    levelCache = require('memory-cache');
     levelCacheTimeInMs = 60000;
 
 /**
