@@ -1,5 +1,5 @@
 {
-    "db": "mongodb://52.34.108.57/lwserver",
+    "db": "mongodb://52.35.158.241/lwserver",
     "app": {
         "name": "LiteWave Server"
     },
