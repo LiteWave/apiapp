@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# install npm modules
-npm install
-
 # stop running node with forever
 forever stopall
 
