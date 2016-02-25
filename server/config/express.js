@@ -5,6 +5,7 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
+    cors = require('cors'),
     config = require('./config');
 
 module.exports = function(app, passport) {
@@ -43,6 +44,8 @@ module.exports = function(app, passport) {
 
     //Enable jsonp
     app.enable("jsonp callback");
+
+    app.use(cors());
 
     app.configure(function() {
         //cookieParser should be above session
