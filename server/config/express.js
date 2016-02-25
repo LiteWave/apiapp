@@ -45,7 +45,15 @@ module.exports = function(app, passport) {
     //Enable jsonp
     app.enable("jsonp callback");
 
-    app.use(cors());
+var whitelist = ['http://127.0.0.1'];
+var corsOptions = {
+  origin: function(origin, callback){
+    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    callback(null, originIsWhitelisted);
+  }
+};
+
+    app.use(cors(corsOptions));
 
     app.configure(function() {
         //cookieParser should be above session
