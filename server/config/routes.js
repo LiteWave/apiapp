@@ -10,8 +10,10 @@ module.exports = function(app, passport, auth) {
     //Setting up the users api
 
     app.get('/api/loggedin', function(req, res) {
-      res.send(req.isAuthenticated() ? req.user : '0');
+      res.send(req.user);
+//res.send(req.isAuthenticated() ? req.user : '0');
     });
+
     app.post('/api/login', passport.authenticate('local'), function(req, res) {
       // successful login, so update last login date
       req.user.lastLogin = new Date();
@@ -62,6 +64,9 @@ module.exports = function(app, passport, auth) {
    
     // UserLocation Routes
     var user_locations = require('../controllers/user_locations');
+    app.get('/api/events/:eventId/user_locations/count', user_locations.count);
+    // Pick and return the winning section
+    app.get('/api/events/:eventId/user_locations/pickwinningsection/:showtype', user_locations.pickwinningsection);
     app.get('/api/events/:eventId/user_locations', user_locations.all);
     app.post('/api/events/:eventId/user_locations', user_locations.create);
     app.get('/api/user_locations/:user_locationId', user_locations.show);
@@ -70,6 +75,7 @@ module.exports = function(app, passport, auth) {
     app.param('user_locationId', user_locations.user_location);
     
     app.param('eventId', events.event);
+    app.param('showtype');
 
     // Shows Routes
     var shows = require('../controllers/shows');
