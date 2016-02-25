@@ -9,17 +9,16 @@ module.exports = function(app, passport, auth) {
 
     //Setting up the users api
 
-    app.get('/api/loggedin', function(req, res) {
-      res.send(req.user);
-//res.send(req.isAuthenticated() ? req.user : '0');
-    });
-
     app.post('/api/login', passport.authenticate('local'), function(req, res) {
       // successful login, so update last login date
       req.user.lastLogin = new Date();
       req.user.save(function(err) {
           res.send(req.user);
       });
+
+    app.get('/api/loggedin', function(req, res) {
+      res.send(req.isAuthenticated() ? req.user : '0');
+    });
 
     });
     app.post('/api/logout', function(req, res) {
