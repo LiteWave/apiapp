@@ -14,12 +14,10 @@ module.exports = function(app, passport, auth) {
       req.user.lastLogin = new Date();
       req.user.save(function(err) {
         res.send(req.user);
-        next();
       });
 
     app.get('/api/loggedin', function(req, res) {
       res.send(req.isAuthenticated() ? req.user : '0');
-next();
     });
 
     });

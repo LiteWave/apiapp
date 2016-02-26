@@ -45,14 +45,14 @@ module.exports = function(app, passport) {
     //Enable jsonp
     app.enable("jsonp callback");
 
-    var whitelist = ['http://127.0.0.1'];
+    var whitelist = ['http://lwadmin.com'];
     var corsOptions = {
       credentials: true, 
-      origin: true,
-      /*origin: function(origin, callback){
+      //origin: true,
+      origin: function(origin, callback){
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
-      }*/
+      }
     };
 
     app.use(cors(corsOptions));
