@@ -56,15 +56,21 @@ module.exports = function(app, passport) {
     };*/
 
 //CORS middleware
-  var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'lwadmin.com');
+/*  var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://lwadmin.com');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     next();
-}
+}*/
 
-    app.use(cors(allowCrossDomain));
+app.all("/api/*", function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+  return next();
+});
+    app.use(cors());
 
     app.configure(function() {
         //cookieParser should be above session
@@ -93,12 +99,8 @@ module.exports = function(app, passport) {
         app.use(passport.initialize());
         app.use(passport.session());
 
-
-
         //routes should be at the last
         app.use(app.router);
-
-
 
         // THIS HAS TO GO AT THE END AFTER IT TRIED ALL OF THE OTHER ROUTES
 

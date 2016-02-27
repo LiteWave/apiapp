@@ -8,6 +8,9 @@ module.exports = function(app, passport, auth) {
     app.get('/signout', users.signout);
 
     //Setting up the users api
+    app.get('/api/loggedin', function(req, res) {
+      res.send(req.isAuthenticated() ? req.user : '0');
+    });
 
     app.post('/api/login', passport.authenticate('local'), function(req, res) {
       // successful login, so update last login date
@@ -15,13 +18,10 @@ module.exports = function(app, passport, auth) {
       req.user.save(function(err) {
         res.send(req.user);
       });
-
-    app.get('/api/loggedin', function(req, res) {
-      res.send(req.isAuthenticated() ? req.user : '0');
     });
 
-    });
-    app.post('/api/logout', function(req, res) {
+    app.post('/api/logout', function (req, res)
+    {
       req.logOut();
       res.send(200);
     });
