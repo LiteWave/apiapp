@@ -56,3 +56,4 @@ def deploy():
         run('npm install')
         print colors.cyan('restarting apiapp...')
         run('./run.sh')
+        print colors.cyan('deploy complete.')

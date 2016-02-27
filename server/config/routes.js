@@ -63,9 +63,9 @@ module.exports = function(app, passport, auth) {
    
     // UserLocation Routes
     var user_locations = require('../controllers/user_locations');
-    app.get('/api/events/:eventId/user_locations/count', user_locations.count);
+    //app.get('/api/events/:eventId/user_locations/count', user_locations.count);
     // Pick and return the winning section
-    app.get('/api/events/:eventId/user_locations/pickwinningsection/:showtype', user_locations.pickwinningsection);
+    //app.get('/api/events/:eventId/user_locations/pickwinningsection/:showtype', user_locations.pickwinningsection);
     app.get('/api/events/:eventId/user_locations', user_locations.all);
     app.post('/api/events/:eventId/user_locations', user_locations.create);
     app.get('/api/user_locations/:user_locationId', user_locations.show);
