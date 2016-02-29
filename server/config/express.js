@@ -51,7 +51,7 @@ module.exports = function(app, passport) {
     var whitelist = 'http://localhost:9000';
     if (process.env.NODE_ENV == 'production')
     {
-      whitelist = 'http://www.litewaveinc.com:9000';
+      whitelist = 'http://www.litewaveinc.com';
     }
 
     // set CORS options to allow cross domain calls between our servers.
