@@ -20,6 +20,8 @@ module.exports = function(app, passport) {
     }));
 
     console.log('------------ in express.js and config.root=' + config.root);
+    console.log('process.env.NODE_ENV=' + process.env.NODE_ENV);
+    
     
     //Setting the fav icon and static folder
     app.use(express.favicon());
@@ -45,32 +47,22 @@ module.exports = function(app, passport) {
     //Enable jsonp
     app.enable("jsonp callback");
 
-    /*var whitelist = ['http://lwadmin.com'];
+    // Need to set this to whatever the client is. Otherwise it won't have access to the APIs.
+    var whitelist = 'http://localhost:9000';
+    if (process.env.NODE_ENV == 'production')
+    {
+      whitelist = 'http://localhost:9000';
+    }
+
+    // set CORS options to allow cross domain calls between our servers.
     var corsOptions = {
-      credentials: true, 
-      //origin: true,
-      origin: function(origin, callback){
-        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-        callback(null, originIsWhitelisted);
-      }
-    };*/
-
-//CORS middleware
-/*  var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://lwadmin.com');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-
-    next();
-}*/
-
-app.all("/api/*", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://lwadmin:9000");
-  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-  return next();
-});
-    app.use(cors());
+        origin: whitelist,
+        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        exposedHeaders: ['Content-Range', 'X-Content-Range'],
+        credentials: true
+    };
+    app.use(cors(corsOptions));
 
     app.configure(function() {
         //cookieParser should be above session
