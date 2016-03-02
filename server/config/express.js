@@ -65,8 +65,8 @@ module.exports = function(app, passport) {
         // },
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
-        exposedHeaders: ['Content-Range', 'X-Content-Range'],
-        credentials: false
+        exposedHeaders: ['Content-Range', 'X-Content-Range']
+        //credentials: false
     };
     app.use(cors(corsOptions));
 
