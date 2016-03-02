@@ -58,15 +58,15 @@ module.exports = function(app, passport) {
 
     // set CORS options to allow cross domain calls between our servers.
     var corsOptions = {
-        origin: '*',
-        // origin: function(origin, callback) {
-        //   var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-        //   callback(null, originIsWhitelisted);
-        // },
+        //origin: whitelist,
+        origin: function(origin, callback) {
+          var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+          callback(null, originIsWhitelisted);
+        },
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
-        exposedHeaders: ['Content-Range', 'X-Content-Range']
-        //credentials: false
+        exposedHeaders: ['Content-Range', 'X-Content-Range'],
+        credentials: true
     };
     app.use(cors(corsOptions));
 
