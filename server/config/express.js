@@ -48,15 +48,21 @@ module.exports = function(app, passport) {
     app.enable("jsonp callback");
 
     // Need to set this to whatever the client is. Otherwise it won't have access to the APIs.
-    var whitelist = 'http://localhost:9000';
-    if (process.env.NODE_ENV == 'production')
-    {
-      whitelist = 'http://www.litewaveinc.com';
-    }
+    // var whitelist = 'http://localhost:9000';
+    // if (process.env.NODE_ENV == 'production')
+    // {
+    //   whitelist = 'http://www.litewaveinc.com';
+    // }
+    // whitelist = "http://localhost:9000";
+    var whitelist = ['http://localhost:9000', 'http://www.litewaveinc.com'];
 
     // set CORS options to allow cross domain calls between our servers.
     var corsOptions = {
-        origin: whitelist,
+        //origin: whitelist,
+        origin: function(origin, callback) {
+          var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+          callback(null, originIsWhitelisted);
+        },
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         exposedHeaders: ['Content-Range', 'X-Content-Range'],
