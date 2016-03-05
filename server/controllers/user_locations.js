@@ -198,3 +198,55 @@ exports.all = function (req, res)
     }
   });
 };
+
+/**
+ * Count of UserLocations for an Event 
+ */
+exports.count = function (req, res)
+{
+  UserLocation.count({ _eventId: req.params.eventId }).exec(function (err, count)
+  {
+    console.log('Inside of count');
+    if (err)
+    {
+      res.render('Error getting count User Locations', {
+        status: 404
+      });
+    } else
+    {
+      console.log('no error, COUNT is' + count);
+      res.json([{ "usercount": count }]);
+    }
+  });
+};
+
+/**
+ * Pick a random winningSection from the list of UserLocations for an Event 
+ */
+exports.pickwinningsection = function (req, res)
+{
+  UserLocation.find({ _eventId: req.params.eventId }).exec(function (err, user_locations)
+  {
+    var userCount = user_locations.length;
+    var randomPerson = user_locations[Math.floor(Math.random() * userCount)];
+    if (!randomPerson)
+    {
+      randomPerson = user_locations[0];
+    }
+
+    var winningSection = randomPerson.userSeat.section;
+
+    console.log('winningSection' + winningSection);
+    if (err)
+    {
+      res.render('Error getting winningSection', {
+        status: 404
+      });
+    }
+    else
+    {
+      console.log('no error, winningSection should be retured');
+      res.json([{ "winningsections": winningSection }]);
+    }
+  });
+};
