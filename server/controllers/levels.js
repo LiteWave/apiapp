@@ -25,7 +25,6 @@ exports.level = function (req, res, next, id)
  */
 exports.levelname = function (req, res, next, name)
 {
-  console.log('Level:name=' + name);
   Level.loadName(name, function (err, level)
   {
     if (err) return next(err);
@@ -41,7 +40,6 @@ exports.levelname = function (req, res, next, name)
 exports.create = function (req, res)
 {
   var level = new Level(req.body);
-  console.log('Level:Create:level.name=' + level.name);
 
   level.save(function (err)
   {
