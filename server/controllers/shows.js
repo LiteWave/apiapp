@@ -52,11 +52,7 @@ exports.update = function (req, res)
   var show = req.show;
   show = _.extend(show, req.body);
 
-<<<<<<< HEAD
   if (show.startShowOffset !== 0)
-=======
-  if (show.startShowOffset === 0)
->>>>>>> 7bb64065c20c1133383d6d193db08eb0af0553d2
   {
     // Use the passed in startOffset to calculate the show start time based on server time.
     var curTime = new Date();

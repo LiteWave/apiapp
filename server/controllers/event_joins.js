@@ -97,10 +97,7 @@ exports.create = function (req, res)
             {
               // Set the first person to join from the winning section as the winner.
               show._winnerId = UL._id;
-<<<<<<< HEAD
               event_join._winnerId = show._winnerId;
-=======
->>>>>>> 7bb64065c20c1133383d6d193db08eb0af0553d2
 
               // Save the show so we don't keep picking a winner.
               show.$update();
