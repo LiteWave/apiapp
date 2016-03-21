@@ -8,8 +8,8 @@ var mongoose = require('mongoose'),
     _ = require('underscore');
 
     // Declare global var.
-    levelCache = require('memory-cache');
-    levelCacheTimeInMs = 60000;
+    inMemoryCache = require('memory-cache');
+    cacheTimeInMs = 60000;
 
 /**
  * Find stadium by id
@@ -31,7 +31,6 @@ exports.stadium = function (req, res, next, id)
 exports.create = function (req, res)
 {
   var stadium = new Stadium(req.body);
-  //console.log('Stadium:Create:stadium.name=' + stadium.name);
 
   stadium.save(function (err)
   {
@@ -119,8 +118,6 @@ exports.showbylevel = function (req, res)
 {
   // decode name of level
   var levelName = decodeURIComponent(req.params.levelName);
-  //console.log('ShowByLevel:req.stadiumId=' + req.stadium._id);
-  //console.log('ShowByLevel:req.level=' + req.params.levelName);
 
   Stadium.findOne({ _id: req.stadium._id }).exec(function (err, stadium)
   {
@@ -146,19 +143,17 @@ exports.showbylevel = function (req, res)
         }
 
         // Do we already have this level in our memory cache?
-        var level = levelCache.get(levelId);
+        var level = inMemoryCache.get(levelId);
         if (level)
         {
-          console.log('ShowByLevel:level. Level found in cache.');
+          //console.log('ShowByLevel:level. Level found in cache.');
           res.jsonp(level);
           return;
         }
         else
         {
-          console.log('ShowByLevel:level. Level NOT found in cache.');
+          //console.log('ShowByLevel:level. Level NOT found in cache.');
         }
-
-        //console.log('ShowByLevel:level.levels=' + stadium.levels);
 
         Level.findOne({ _id: levelId }).exec(function (err, level)
         {
@@ -170,7 +165,7 @@ exports.showbylevel = function (req, res)
           }
 
           // Save this level by its _id to the memory cache.          
-          levelCache.put(levelId, level, levelCacheTimeInMs);
+          inMemoryCache.put(levelId, level, cacheTimeInMs);
 
           res.jsonp(level);
         });

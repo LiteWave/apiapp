@@ -29,6 +29,23 @@ EventJoinSchema.statics = {
     this.findOne({
       _id: id
     }).exec(cb);
+  },
+  createEJ: function (EJ, UL, show, showCommand)
+  {
+    var logicalCmd = showCommand.commands[UL.logicalCol];
+    if (!logicalCmd || !logicalCmd.commandList)
+    {
+      console.log('Commands for this logical column are not available.');
+      return null;
+    }
+
+    // retrieve the commands for this user based on their logical row or col. Only col for now.
+    EJ.commands = logicalCmd.commandList;
+
+    // use the offset to set the time for this phone to start
+    EJ.mobileStartAt = new Date(Math.round(show.startAt.getTime() + EJ.mobileTimeOffset));
+
+    return EJ;
   }
 };
 

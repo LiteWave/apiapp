@@ -16,7 +16,6 @@ exports.event_join = function (req, res, next, id)
 {
   EventJoin.load(id, function (err, event_join)
   {
-    //console.log('in event_join constr');
     // don't know this was doing.
     //EventJoin.findOne({ _id: req.params.event_joinId }).populate('_user_location_Id').exec(function (err, event_joint) {
     //console.log(err);
@@ -60,7 +59,6 @@ exports.create = function (req, res)
     {      
       if (!show)
       {
-        //console.log('error, event liteshow is null');
         console.log(err);
         res.status(404);
         res.send({ error: 'show not available' });
@@ -68,9 +66,6 @@ exports.create = function (req, res)
       }
       else
       {
-        //console.log('EJ. show:startAt:' + show.startAt);
-        //console.log('EJ:trying to create the EJ');
-
         UserLocation.findOne({ _eventId: req.user_location._eventId, _id: requestUserLocationId }, function (err, UL)
         {
           if (err)
@@ -89,6 +84,11 @@ exports.create = function (req, res)
             return;
           }
 
+          var event_join = new EventJoin(req.body);
+          event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
+          event_join._user_location_Id = req.user_location._id;
+          event_join._showId = show._id;
+
           // Pick a winner if we don't have one.
           if (!show._winnerId)
           {
@@ -97,14 +97,33 @@ exports.create = function (req, res)
             {
               // Set the first person to join from the winning section as the winner.
               show._winnerId = UL._id;
+              event_join._winnerId = show._winnerId;
+
+              // Save the show so we don't keep picking a winner.
+              show.$update();
             }
           }
 
-          var event_join = new EventJoin(req.body);
-          event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
-          //console.log('EJ:Create. event_join.mobileTimeOffset:' + event_join.mobileTimeOffset);
-          event_join._user_location_Id = req.user_location._id;
-          event_join._showId = show._id;
+          // Do we already have this level in our memory cache?
+          var showCommand = inMemoryCache.get(show._showCommandId);
+          if (showCommand)
+          {
+            //console.log('showCommand found in cache.');
+
+            // createEJ: function (EJ, UL, show, showCommand)
+            event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
+            if (event_join !== null)
+            {
+              // If no error return. If error try and retrieve commands from db.
+              event_join.save();
+              res.jsonp(event_join);
+              return;
+            }
+          }
+          else
+          {
+            //console.log('showCommand NOT found in cache.');
+          }
 
           ShowCommand.findOne({ _id: show._showCommandId }, function (err, showCommand)
           {
@@ -124,42 +143,21 @@ exports.create = function (req, res)
               return;
             }
 
-            var logicalCmd = showCommand.commands[UL.logicalCol];
-            if (!logicalCmd || !logicalCmd.commandList)
+            // Save all the Show Commands so we don't have to get them for every user!
+            inMemoryCache.put(show._showCommandId, showCommand, cacheTimeInMs);
+
+            // createEJ: function (EJ, UL, show, showCommand)
+            event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
+            if (event_join === null)
             {
-              console.log('Commands for this logical column are not available.');
+              console.log('Show Command not available.');
               res.status(404);
-              res.send({ error: 'Commands for this logical column are not available' });
+              res.send({ error: 'Show Command not available' });
               return;
             }
 
-            //console.log('EJ:Create:Commands:showCommand:showCommand[0].commands[0]');
-            //console.log('EJ:Create:' + showCommand.commands[0].commandList);
-
-            // retrieve the commands for this user based on their logical row or col. Only col for now.
-            event_join.commands = logicalCmd.commandList;
-            event_join._winnerId = null;
-            event_join._winnerId = !!(show._winnerId) ? show._winnerId : null;
-
-            //console.log('EJ:Create::event_join._winnerId=' + event_join._winnerId);
-
-            // use the offset to set the time for this phone to start
-            event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
-            //console.log('EJ:Create. event_join.mobileStartAt:' + event_join.mobileStartAt);
-            //console.log('EJ:Create. show.startAt:' + show.startAt);
-
-            event_join.save(function (err)
-            {
-              if (err)
-              {
-                res.render('error', {
-                  status: 400
-                });
-              } else
-              {
-                res.jsonp(event_join);
-              }
-            });
+            event_join.save();
+            res.jsonp(event_join);
           }); // end ShowCommand
         }); // end UL
       } // end else

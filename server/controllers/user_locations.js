@@ -33,16 +33,11 @@ exports.user_location = function (req, res, next, id)
  */
 exports.create = function (req, res)
 {
-  //console.log('UL:Create:event id=' + req.params.eventId + '. userKey:' + req.body.userKey);
-  //console.log('UL:Create:event req.body.userSeat.level=' + req.body.userSeat.level + '. req.body.userSeat.section:' + req.body.userSeat.section);
-  //console.log('UL:Create:event req.body.userSeat.row=' + req.body.userSeat.row + '. req.body.userSeat.seat:' + req.body.userSeat.seat);
-
   UserLocation.findOne({
     _eventId: req.params.eventId,
     "userSeat.level": req.body.userSeat.level, "userSeat.section" : req.body.userSeat.section, "userSeat.row" : req.body.userSeat.row, "userSeat.seat" : req.body.userSeat.seat
   }).exec(function (err, user_location)
   {
-    //console.log("UL:" + user_location);
     if (err)
     {
       console.log('UL:Create:Some kind of error on finding UL: ' + err);
@@ -52,9 +47,6 @@ exports.create = function (req, res)
     if (user_location != null)
     {
       // Check if this user is rejoining or someone is trying to take someone else's seat.
-      //console.log('UL:Create:UL NOT NULL: ');
-      //console.log('UL:Create:req.body.userKey: ' + req.body.userKey);
-      //console.log('UL:Create:user_location.userKey: ' + user_location.userKey);
       if (req.body.userKey.localeCompare(user_location.userKey) != 0)
       {
         // This seat is already taken. Return 400.
@@ -71,7 +63,7 @@ exports.create = function (req, res)
     else
     {
       // Brand new user joining.
-      console.log('UL:Create:No UL. Creating new UL with ' + req.body.userKey);
+      //console.log('UL:Create:No UL. Creating new UL with ' + req.body.userKey);
     }
 
     LogicalLayout.findOne({ _eventId: req.params.eventId }).exec(function (err, layout)
@@ -101,19 +93,11 @@ exports.create = function (req, res)
       if (req.body.mobileTime)
       {
         var curTime = new Date();
-        //console.log('UL:Create. Server curTime initial:' + curTime);
         var curUTCTime = curTime.getTime() - (curTime.getTimezoneOffset() * 60000);  // convert to GMT time offset
-        //console.log('UL:Create. Server curUTCTime:' + curUTCTime);
 
         var mobile_date = new Date(req.body.mobileTime);
         var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
         mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
-        //mobile_time_offset = mobile_date.getTime() - curUTCTime;
-
-        //console.log('UL:Create. mobile_timezone_offset:' + mobile_timezone_offset);
-        //console.log('UL:Create. mobile_time_offset:' + mobile_time_offset);
-        //console.log('UL:Create. Mobile Time:' + mobile_date);
-
         user_location.mobileTimeOffset = mobile_time_offset;
       }
 
@@ -185,7 +169,6 @@ exports.all = function (req, res)
 {
   UserLocation.find({ _eventId: req.params.eventId }).exec(function (err, user_locations)
   {
-    //console.log('Inside of Find');
     if (err)
     {
       res.render('Error getting User Locations', {
@@ -193,7 +176,6 @@ exports.all = function (req, res)
       });
     } else
     {
-      //console.log('no error results should be retured');
       res.json(user_locations);
     }
   });
@@ -206,7 +188,6 @@ exports.count = function (req, res)
 {
   UserLocation.count({ _eventId: req.params.eventId }).exec(function (err, count)
   {
-    console.log('Inside of count');
     if (err)
     {
       res.render('Error getting count User Locations', {
@@ -214,7 +195,6 @@ exports.count = function (req, res)
       });
     } else
     {
-      console.log('no error, COUNT is' + count);
       res.json([{ "usercount": count }]);
     }
   });
@@ -236,7 +216,6 @@ exports.pickwinningsection = function (req, res)
 
     var winningSection = randomPerson.userSeat.section;
 
-    console.log('winningSection' + winningSection);
     if (err)
     {
       res.render('Error getting winningSection', {
@@ -245,7 +224,6 @@ exports.pickwinningsection = function (req, res)
     }
     else
     {
-      console.log('no error, winningSection should be retured');
       res.json([{ "winningsections": winningSection }]);
     }
   });
