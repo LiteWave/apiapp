@@ -52,8 +52,11 @@ def deploy():
         run('git checkout %s' % env['branch'])
         run('git pull origin %s' % env['branch'])
         
+        run('. env/bin/activate')
         print colors.cyan('installing node dependencies...')
         run('npm install')
         print colors.cyan('restarting apiapp...')
         run('./run.sh')
+        run('deactivate_node')
+        
         print colors.cyan('deploy complete.')
