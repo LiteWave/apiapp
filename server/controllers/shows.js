@@ -52,14 +52,11 @@ exports.update = function (req, res)
   var show = req.show;
   show = _.extend(show, req.body);
 
-  if (show.startShowOffset !== 0)
-  {
-    // Use the passed in startOffset to calculate the show start time based on server time.
-    var curTime = new Date();
-    var startTime = Math.floor(curTime.getTime() + (1000 * show.startShowOffset));
-    var startTimeDate = new Date(startTime);
-    show.startAt = startTimeDate;
-  }
+  // Use the passed in startOffset to calculate the show start time based on server time.
+  var curTime = new Date();
+  var startTime = Math.floor(curTime.getTime() + (1000 * show.startShowOffset));
+  var startTimeDate = new Date(startTime);
+  show.startAt = startTimeDate;
 
   // Save the show
   show.save(function (err)
