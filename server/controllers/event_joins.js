@@ -105,7 +105,7 @@ exports.create = function (req, res)
           }
 
           // Do we already have this level in our memory cache?
-          var showCommand = inMemoryCache.get(show._showCommandId);
+          /*var showCommand = inMemoryCache.get(show._showCommandId);
           if (showCommand)
           {
             //console.log('showCommand found in cache.');
@@ -123,7 +123,7 @@ exports.create = function (req, res)
           else
           {
             //console.log('showCommand NOT found in cache.');
-          }
+          }*/
 
           ShowCommand.findOne({ _id: show._showCommandId }, function (err, showCommand)
           {
@@ -143,11 +143,39 @@ exports.create = function (req, res)
               return;
             }
 
+            var logicalCmd = showCommand.commands[UL.logicalCol];
+            if (!logicalCmd || !logicalCmd.commandList)
+            {
+              console.log('Commands for this logical column are not available.');
+              res.status(404);
+              res.send({ error: 'Commands for this logical column are not available' });
+              return;
+            }
+
+            // retrieve the commands for this user based on their logical row or col. Only col for now.
+            event_join.commands = logicalCmd.commandList;
+
+            // use the offset to set the time for this phone to start
+            event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
+
+            event_join.save(function (err)
+            {
+              if (err)
+              {
+                res.render('error', {
+                  status: 400
+                });
+              } else
+              {
+                res.jsonp(event_join);
+              }
+            });
+
             // Save all the Show Commands so we don't have to get them for every user!
-            inMemoryCache.put(show._showCommandId, showCommand, cacheTimeInMs);
+            //inMemoryCache.put(show._showCommandId, showCommand, cacheTimeInMs);
 
             // createEJ: function (EJ, UL, show, showCommand)
-            event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
+            /*event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
             if (event_join === null)
             {
               console.log('Show Command not available.');
@@ -157,7 +185,7 @@ exports.create = function (req, res)
             }
 
             event_join.save();
-            res.jsonp(event_join);
+            res.jsonp(event_join);*/
           }); // end ShowCommand
         }); // end UL
       } // end else
