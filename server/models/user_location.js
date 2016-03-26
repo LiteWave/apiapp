@@ -28,7 +28,6 @@ var UserLocationSchema = new Schema({
 UserLocationSchema.statics = {
   load: function (id, cb)
   {
-    //console.log('UL:LOAD:id' + id);
     this.findOne({
       _id: id
     }).exec(cb);
@@ -57,14 +56,11 @@ UserLocationSchema.methods = {
     var col = 0;
     for (col = 0; col < colLength; col++)
     {
-      //console.log('layout.columns[col].sectionList: ' + layout.columns[col].sectionList);
       sectionLength = layout.columns[col].sectionList.length;
       for (section = 0; section < sectionLength; section++)
       {
-        // console.log('layout.columns[col].sectionList[sectionLength]: ' + layout.columns[col].sectionList[section]);
         if (layout.columns[col].sectionList[section] === this.userSeat.section)
         {
-          //console.log('FOUND. Logical column will be: ' + col);
           this.logicalCol = col;
           this.logicalRow = 1;
           col = colLength + 1;

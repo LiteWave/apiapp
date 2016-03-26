@@ -38,7 +38,6 @@ LevelSchema.statics = {
   },
   loadName: function (name, cb)
   {
-    //console.log('Level:name=' + name);
     this.findOne({
       name: name
     }).exec(cb);

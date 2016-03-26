@@ -12,7 +12,6 @@ var mongoose = require('mongoose'),
  */
 exports.show = function (req, res, next, id)
 {
-  //console.log('SHOW:Show:id=' + id);
   Show.load(id, function (err, show)
   {
     if (err) return next(err);
@@ -29,8 +28,6 @@ exports.create = function (req, res)
 {
   var show = new Show(req.body);
   show._eventId = req.params.eventId;
-  //console.log('SHOW:Create:clientId=' + show._eventId);
-  //console.log('SHOW:Create:req.body=' + req.body);
   show.save(function (err)
   {
     if (err)
@@ -52,15 +49,17 @@ exports.create = function (req, res)
  */
 exports.update = function (req, res)
 {
-  //console.log('SHOW:Update:req=' + req);
   var show = req.show;
   show = _.extend(show, req.body);
 
-  // Use the passed in startOffset to calculate the show start time based on server time.
-  var curTime = new Date();
-  var startTime = Math.floor(curTime.getTime() + (1000 * show.startShowOffset));
-  var startTimeDate = new Date(startTime);
-  show.startAt = startTimeDate;
+  if (show.startShowOffset !== 0)
+  {
+    // Use the passed in startOffset to calculate the show start time based on server time.
+    var curTime = new Date();
+    var startTime = Math.floor(curTime.getTime() + (1000 * show.startShowOffset));
+    var startTimeDate = new Date(startTime);
+    show.startAt = startTimeDate;
+  }
 
   // Save the show
   show.save(function (err)
@@ -96,7 +95,6 @@ exports.destroy = function (req, res)
  */
 exports.getshow = function (req, res)
 {
-  //console.log('SHOW:GetShow:req.params.showId=');
   res.jsonp(req.show);
 };
 
