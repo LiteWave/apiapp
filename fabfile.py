@@ -31,7 +31,8 @@ def deploy_prod(branch):
     deploy apiapp to production
     """
     hosts = [
-        '52.35.158.241',
+        #'52.35.158.241', #webmini,
+        '52.10.194.211' #web1,
     ]
     env['branch'] = branch
     env['environment'] = 'production'
@@ -52,11 +53,10 @@ def deploy():
         run('git checkout %s' % env['branch'])
         run('git pull origin %s' % env['branch'])
         
-        run('. env/bin/activate')
         print colors.cyan('installing node dependencies...')
-        run('npm install')
+        run('./install.sh')
+
         print colors.cyan('restarting apiapp...')
         run('./run.sh')
-        run('deactivate_node')
         
         print colors.cyan('deploy complete.')
