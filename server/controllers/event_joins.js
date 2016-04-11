@@ -88,6 +88,7 @@ exports.create = function (req, res)
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
           event_join._user_location_Id = req.user_location._id;
           event_join._showId = show._id;
+          event_join._winnerId = null;
 
           // Pick a winner if we don't have one.
           if (!show._winnerId)
