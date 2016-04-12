@@ -106,7 +106,7 @@ exports.create = function (req, res)
             }
           }
 
-          if (show._winnerId === event_join._user_location_Id)
+          if (show._winnerId.toString() === event_join._user_location_Id.toString())
           {
             event_join._winnerId = show._winnerId;
           }
