@@ -13,6 +13,7 @@ var ClientSchema = new Schema({
     type: String,
     trim: true
   },
+  stadiumId: { type: String, trim: true  },
   settings: {
     backgroundColor: { type: String, trim: true },
     borderColor: { type: String, trim: true },

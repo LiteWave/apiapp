@@ -88,7 +88,9 @@ exports.create = function (req, res)
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
           event_join._user_location_Id = req.user_location._id;
           event_join._showId = show._id;
+          event_join._winnerId = null;
 
+          // TODO: This won't work now. We should always have a winner.
           // Pick a winner if we don't have one.
           if (!show._winnerId)
           {
@@ -104,26 +106,10 @@ exports.create = function (req, res)
             }
           }
 
-          // Do we already have this level in our memory cache?
-          /*var showCommand = inMemoryCache.get(show._showCommandId);
-          if (showCommand)
+          if (show._winnerId.toString() === event_join._user_location_Id.toString())
           {
-            //console.log('showCommand found in cache.');
-
-            // createEJ: function (EJ, UL, show, showCommand)
-            event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
-            if (event_join !== null)
-            {
-              // If no error return. If error try and retrieve commands from db.
-              event_join.save();
-              res.jsonp(event_join);
-              return;
-            }
+            event_join._winnerId = show._winnerId;
           }
-          else
-          {
-            //console.log('showCommand NOT found in cache.');
-          }*/
 
           ShowCommand.findOne({ _id: show._showCommandId }, function (err, showCommand)
           {
@@ -170,22 +156,6 @@ exports.create = function (req, res)
                 res.jsonp(event_join);
               }
             });
-
-            // Save all the Show Commands so we don't have to get them for every user!
-            //inMemoryCache.put(show._showCommandId, showCommand, cacheTimeInMs);
-
-            // createEJ: function (EJ, UL, show, showCommand)
-            /*event_join = EventJoin.createEJ(event_join, UL, show, showCommand);
-            if (event_join === null)
-            {
-              console.log('Show Command not available.');
-              res.status(404);
-              res.send({ error: 'Show Command not available' });
-              return;
-            }
-
-            event_join.save();
-            res.jsonp(event_join);*/
           }); // end ShowCommand
         }); // end UL
       } // end else

@@ -85,12 +85,12 @@ module.exports = function(app, passport, auth) {
     
     app.param('showId', shows.show);
 
-    // Logical Layout Routes
+    // Logical Layout Routes 1
     var logicallayouts = require('../controllers/logicallayouts');
-    app.get('/api/events/:eventId/logicallayouts', logicallayouts.all);
-    app.post('/api/events/:eventId/logicallayouts', logicallayouts.create);
-    app.get('/api/events/:eventId/logicallayouts/:logicallayoutId', logicallayouts.show);
-    app.put('/api/events/:eventId/logicallayouts/:logicallayoutId', logicallayouts.update);
+    app.get('/api/stadiums/:stadiumId/logicallayouts', logicallayouts.all);
+    app.post('/api/stadiums/:stadiumId/logicallayouts', logicallayouts.create);
+    app.get('/api/stadiums/:stadiumId/logicallayouts/:logicallayoutId', logicallayouts.show);
+    app.put('/api/stadiums/:stadiumId/logicallayouts/:logicallayoutId', logicallayouts.update);
 
     app.param('logicallayoutId', logicallayouts.logicallayout);
 

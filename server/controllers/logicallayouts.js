@@ -26,7 +26,7 @@ exports.logicallayout = function (req, res, next, id)
 exports.create = function (req, res)
 {
   var logicallayout = new LogicalLayout(req.body);
-  logicallayout._eventId = req.params.eventId;
+  logicallayout._stadiumId = req.params.stadiumId;
   logicallayout.save(function (err)
   {
     if (err)
@@ -87,11 +87,11 @@ exports.show = function (req, res)
 };
 
 /**
- * List of Shows for an Event 
+ * List of Layouts for a Stadium
  */
 exports.all = function (req, res)
 {
-  LogicalLayout.find({ _eventId: req.event._id }).exec(function (err, logicallayouts)
+  LogicalLayout.find({ _stadiumId: req.stadium._id }).exec(function (err, logicallayouts)
   {
     if (err)
     {
