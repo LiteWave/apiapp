@@ -25,6 +25,14 @@ Install forever:
 
 `node server/server.js`
 
+Server available at:
+
+`http://localhost:3000/api`
+
 ## Deployment
 
 `fab deploy:prod`
+
+Server available at:
+
+`www.litewaveinc.com/api`
