@@ -47,6 +47,7 @@ module.exports = function(app, passport, auth) {
     app.post('/api/clients', clients.create);
     app.get('/api/clients/:clientId', clients.show);
     app.put('/api/clients/:clientId', auth.requiresLogin, clients.update);
+    app.del('/api/clients/:clientId', clients.destroy);
 
     // this will turn the clientId in the url parameter into a client object in the req object (req.client)
     app.param('clientId', clients.client);   
@@ -87,10 +88,17 @@ module.exports = function(app, passport, auth) {
 
     // Logical Layout Routes 1
     var logicallayouts = require('../controllers/logicallayouts');
-    app.get('/api/stadiums/:stadiumId/logicallayouts', logicallayouts.all);
+    /*app.get('/api/stadiums/:stadiumId/logicallayouts', logicallayouts.all);
     app.post('/api/stadiums/:stadiumId/logicallayouts', logicallayouts.create);
     app.get('/api/stadiums/:stadiumId/logicallayouts/:logicallayoutId', logicallayouts.show);
-    app.put('/api/stadiums/:stadiumId/logicallayouts/:logicallayoutId', logicallayouts.update);
+    app.put('/api/stadiums/:stadiumId/logicallayouts/:logicallayoutId', logicallayouts.update);*/
+
+    // LogicalLayout 2
+    app.get('/api/logicallayouts', logicallayouts.all);
+    app.post('/api/logicallayouts', logicallayouts.create);
+    app.get('/api/logicallayouts/:logicallayoutId', logicallayouts.show);
+    app.put('/api/logicallayouts/:logicallayoutId', logicallayouts.update);
+    app.del('/api/logicallayouts/:logicallayoutId', logicallayouts.destroy);
 
     app.param('logicallayoutId', logicallayouts.logicallayout);
 
@@ -132,6 +140,7 @@ module.exports = function(app, passport, auth) {
     app.get('/api/stadiums/:stadiumId', stadiums.show);
     app.put('/api/stadiums/:stadiumId', stadiums.update);
     app.get('/api/stadiums/client/:clientId', stadiums.showbyclient);
+    app.del('/api/stadiums/:stadiumId', stadiums.destroy);
       
     app.param('stadiumId', stadiums.stadium);
   

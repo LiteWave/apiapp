@@ -26,12 +26,11 @@ exports.logicallayout = function (req, res, next, id)
 exports.create = function (req, res)
 {
   var logicallayout = new LogicalLayout(req.body);
-  logicallayout._stadiumId = req.params.stadiumId;
+  //logicallayout._stadiumId = req.params.stadiumId;
   logicallayout.save(function (err)
   {
     if (err)
     {
-      console.log('LogicalLayout:Create:err=' + err);
       return res.send('shows/', {
         errors: err.errors,
         logicallayout: logicallayout
@@ -50,6 +49,7 @@ exports.update = function (req, res)
 {
   var logicallayout = req.logicallayout;
   logicallayout = _.extend(logicallayout, req.body);
+
   logicallayout.save(function (err)
   {
     res.jsonp(logicallayout);
@@ -63,7 +63,6 @@ exports.update = function (req, res)
 exports.destroy = function (req, res)
 {
   var logicallayout = req.logicallayout;
-
   logicallayout.remove(function (err)
   {
     if (err)
@@ -91,7 +90,7 @@ exports.show = function (req, res)
  */
 exports.all = function (req, res)
 {
-  LogicalLayout.find({ _stadiumId: req.stadium._id }).exec(function (err, logicallayouts)
+  LogicalLayout.find().exec(function (err, logicallayouts)
   {
     if (err)
     {
