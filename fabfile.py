@@ -70,6 +70,6 @@ def deploy():
         run('./install.sh')
 
         print colors.cyan('restarting apiapp...')
-        run('./run.sh')
+        run('./run.sh %s' % env['environment'])
         
         print colors.cyan('deploy complete.')
