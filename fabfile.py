@@ -42,7 +42,7 @@ def deploy_prod(branch):
 @task
 def deploy_stage(branch):
     """
-    deploy apiapp to production
+    deploy apiapp to staging
     """
     hosts = [
         '52.35.158.241', #webmini,
