@@ -11,6 +11,7 @@ if [ $# -eq 0 ]
   then
     env = "production"
 fi
-NODE_ENV=$1 forever start /var/www/apiapp/server/server.js
+
+eval NODE_ENV=$1 forever start /var/www/apiapp/server/server.js
 
 deactivate_node
