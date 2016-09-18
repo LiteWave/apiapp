@@ -48,7 +48,7 @@ def deploy_stage(branch):
         '52.35.158.241', #webmini,
     ]
     env['branch'] = branch
-    env['environment'] = 'production'
+    env['environment'] = 'staging'
     execute(deploy, hosts=hosts)
 
 def deploy():
