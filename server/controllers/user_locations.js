@@ -47,12 +47,12 @@ exports.create = function (req, res)
     if (user_location != null)
     {
       // Check if this user is rejoining or someone is trying to take someone else's seat.
-      if (req.body.userKey.localeCompare(user_location.userKey) != 0)
+      /*if (req.body.userKey.localeCompare(user_location.userKey) != 0)
       {
         // This seat is already taken. Return 400.
         console.log('UL:Create:This seat is already taken.');
         return res.status(400).jsonp(err);
-      }
+      }*/
 
       // Found an existing user who is rejoining. Log a message that we are reusing the UL.
       //console.log('UL:Create:Info: Reusing userLocation with userKey=' + req.body.userKey);
