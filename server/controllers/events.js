@@ -6,6 +6,10 @@ var mongoose = require('mongoose'),
     Event = mongoose.model('Event'),
     _ = require('underscore');
 
+    // Declare global var.
+    LWEventsInMemoryCache = require('memory-cache');
+    LWEventsCacheTimeInMs = 60000;
+
 /**
  * Find event by id
  */
@@ -91,6 +95,17 @@ exports.show = function (req, res)
  */
 exports.all = function (req, res)
 {
+  var cacheKey = req.client._id;
+
+  // Do we already have events in our memory cache?
+  var events = LWEventsInMemoryCache.get(cacheKey);
+  if (events)
+  {
+    //console.log('Events:all. events found in cache.');
+    res.jsonp(events);
+    return;
+  }
+
   Event.find({ _clientId: req.client._id }).sort('-date').limit(10).exec(function (err, events)
   {
     if (err)
@@ -98,8 +113,12 @@ exports.all = function (req, res)
       res.render('Could not find events', {
         status: 404
       });
-    } else
+    }
+    else
     {
+      // Save events to the memory cache.
+      LWEventsInMemoryCache.put(cacheKey, events, LWEventsCacheTimeInMs);
+
       res.jsonp(events);
     }
   });

@@ -8,8 +8,8 @@ var mongoose = require('mongoose'),
     _ = require('underscore');
 
     // Declare global var.
-    inMemoryCache = require('memory-cache');
-    cacheTimeInMs = 60000;
+    LWStadiumInMemoryCache = require('memory-cache');
+    LWStadiumCacheTimeInMs = 60000;
 
 /**
  * Find stadium by id
@@ -34,7 +34,7 @@ exports.create = function (req, res)
 
   stadium.save(function (err)
   {
-    console.log('Stadium:Create:err=' + err);
+//    console.log('Stadium:Create:err=' + err);
     if (err)
     {
       return res.send('stadiums', {
@@ -97,6 +97,17 @@ exports.show = function (req, res)
  */
 exports.showbyclient = function (req, res)
 {
+  var cacheKey = req.client._id;
+
+  // Do we already have this level in our memory cache?
+  var stadiums = LWStadiumInMemoryCache.get(cacheKey);
+  if (stadiums)
+  {
+    //console.log('ShowByClient:stadium. stadium found in cache.');
+    res.jsonp(stadiums);
+    return;
+  }
+
   Stadium.find({ _clientId: req.client._id }).exec(function (err, stadiums)
   {
     if (err)
@@ -104,8 +115,12 @@ exports.showbyclient = function (req, res)
       res.render('error', {
         status: 404
       });
-    } else
+    }
+    else
     {
+      // Save stadiums to the memory cache.          
+      LWStadiumInMemoryCache.put(cacheKey, stadiums, LWStadiumCacheTimeInMs);
+
       res.jsonp(stadiums);
     }
   });
@@ -118,6 +133,16 @@ exports.showbylevel = function (req, res)
 {
   // decode name of level
   var levelName = decodeURIComponent(req.params.levelName);
+  var cacheKey = req.stadium._id + ':' + levelName;
+
+  // Do we already have this level in our memory cache?
+  var level = LWStadiumInMemoryCache.get(cacheKey);
+  if (level)
+  {
+    //console.log('ShowByLevel:level. level found in cache.');
+    res.jsonp(level);
+    return;
+  }
 
   Stadium.findOne({ _id: req.stadium._id }).exec(function (err, stadium)
   {
@@ -142,19 +167,6 @@ exports.showbylevel = function (req, res)
           }  
         }
 
-        // Do we already have this level in our memory cache?
-        var level = inMemoryCache.get(levelId);
-        if (level)
-        {
-          //console.log('ShowByLevel:level. Level found in cache.');
-          res.jsonp(level);
-          return;
-        }
-        else
-        {
-          //console.log('ShowByLevel:level. Level NOT found in cache.');
-        }
-
         Level.findOne({ _id: levelId }).exec(function (err, level)
         {
           if (err)
@@ -165,7 +177,7 @@ exports.showbylevel = function (req, res)
           }
 
           // Save this level by its _id to the memory cache.          
-          inMemoryCache.put(levelId, level, cacheTimeInMs);
+          LWStadiumInMemoryCache.put(cacheKey, level, LWStadiumCacheTimeInMs);
 
           res.jsonp(level);
         });
