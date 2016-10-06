@@ -144,8 +144,6 @@ exports.create = function (req, res)
                     });
                   } else
                   {
-                    console.log('EVENT JOIN=' + event_join);
-
                     res.jsonp(event_join);
                   }
                 });
@@ -196,8 +194,6 @@ exports.create = function (req, res)
                   });
                 } else
                 {
-                  console.log('EVENT JOIN=' + event_join);
-
                   res.jsonp(event_join);
                 }
               });
