@@ -84,8 +84,6 @@ exports.create = function (req, res)
             return;
           }
 
-console.log('CreateEJ here. show=' + show);
-
           var event_join = new EventJoin(req.body);
           event_join.mobileTimeOffset = !!(UL.mobileTimeOffset) ? UL.mobileTimeOffset : 0;
           event_join._user_location_Id = req.user_location._id;
@@ -98,63 +96,61 @@ console.log('CreateEJ here. show=' + show);
           {
             // TODO handle multiple sections.
             show.winnerSections = UL.userSeat.section;
-            if (show.winnerSections && (UL.userSeat.section.indexOf(show.winnerSections.toString()) > -1))
-            {
-              // Set the first person to join from the winning section as the winner.
-              event_join._winnerId = show._winnerId;
 
-              // Save the show so we don't keep picking a winner.
-              var seat = 'Section: ' + UL.userSeat.section + '. Row: ' + UL.userSeat.row + '. Seat: ' + UL.userSeat.seat;
-              Show.update({ _id: show._id }, { $set: { _winnerId: UL._id , winnerSections: UL.userSeat.section , winnerSeat: seat } }, function (err, show2)
+            // Set the first person to join as the winner.
+            event_join._winnerId = show._winnerId;
+
+            // Save the show so we don't keep picking a winner.
+            var seat = 'Section: ' + UL.userSeat.section + '. Row: ' + UL.userSeat.row + '. Seat: ' + UL.userSeat.seat;
+            Show.update({ _id: show._id }, { $set: { _winnerId: UL._id , winnerSections: UL.userSeat.section , winnerSeat: seat } }, function (err, show2)
+            {
+              ShowCommand.findOne({ _id: show._showCommandId }, function (err, showCommand)
               {
-                ShowCommand.findOne({ _id: show._showCommandId }, function (err, showCommand)
+                if (err)
+                {
+                  console.log('Err in find SC. err=' + err);
+                  res.status(400);
+                  res.send({ error: 'Show Command not available' });
+                  return;
+                }
+
+                if (!showCommand)
+                {
+                  console.log('Show Command not available.');
+                  res.status(404);
+                  res.send({ error: 'Show Command not available' });
+                  return;
+                }
+
+                var logicalCmd = showCommand.commands[UL.logicalCol];
+                if (!logicalCmd || !logicalCmd.commandList)
+                {
+                  console.log('Commands for this logical column are not available.');
+                  res.status(404);
+                  res.send({ error: 'Commands for this logical column are not available' });
+                  return;
+                }
+
+                // retrieve the commands for this user based on their logical row or col. Only col for now.
+                event_join.commands = logicalCmd.commandList;
+
+                // use the offset to set the time for this phone to start
+                event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
+
+                event_join.save(function (err)
                 {
                   if (err)
                   {
-                    console.log('Err in find SC. err=' + err);
-                    res.status(400);
-                    res.send({ error: 'Show Command not available' });
-                    return;
-                  }
-
-                  if (!showCommand)
+                    res.render('error', {
+                      status: 400
+                    });
+                  } else
                   {
-                    console.log('Show Command not available.');
-                    res.status(404);
-                    res.send({ error: 'Show Command not available' });
-                    return;
+                    res.jsonp(event_join);
                   }
-
-                  var logicalCmd = showCommand.commands[UL.logicalCol];
-                  if (!logicalCmd || !logicalCmd.commandList)
-                  {
-                    console.log('Commands for this logical column are not available.');
-                    res.status(404);
-                    res.send({ error: 'Commands for this logical column are not available' });
-                    return;
-                  }
-
-                  // retrieve the commands for this user based on their logical row or col. Only col for now.
-                  event_join.commands = logicalCmd.commandList;
-
-                  // use the offset to set the time for this phone to start
-                  event_join.mobileStartAt = new Date(Math.round(show.startAt.getTime() + event_join.mobileTimeOffset));
-
-                  event_join.save(function (err)
-                  {
-                    if (err)
-                    {
-                      res.render('error', {
-                        status: 400
-                      });
-                    } else
-                    {
-                      res.jsonp(event_join);
-                    }
-                  });
-                }); // end ShowCommand
-              }); // end Show
-            }
+                });
+              }); // end ShowCommand
+            }); // end Show
           }
         }); // end UL
       } // end else
