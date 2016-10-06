@@ -73,9 +73,9 @@ exports.create = function (req, res)
 
       //console.log('Show:Create:currentLayout=' + currentLayout[0].columns);
     
-      show.winnerSections = winningUL.userSeat.section;
-      show._winnerId = winningUL._id;
-      show.winnerSeat = 'Row:' + winningUL.userSeat.row + '. Seat: ' + winningUL.userSeat.seat;
+      //show.winnerSections = winningUL.userSeat.section;
+      //show._winnerId = winningUL._id;
+      //show.winnerSeat = 'Row:' + winningUL.userSeat.row + '. Seat: ' + winningUL.userSeat.seat;
 
       var black = "0,0,0";
       var red = "216,19,37";
@@ -113,7 +113,7 @@ exports.create = function (req, res)
         if (show.type >= 1)
         {
           // TODO Need to handle multiple winning sections with a loop.
-          onWinnerSection = (currentSection.indexOf(show.winnerSections.toString()) > -1);
+          //onWinnerSection = (currentSection.indexOf(show.winnerSections.toString()) > -1);
         }
 
         // If a LiteShow
@@ -156,31 +156,31 @@ exports.create = function (req, res)
           cmdList.push({ "bg": white, "cl": second_length });
 
           // Take out a few commands from non-winner sections
-          if (onWinnerSection) {
+          //if (onWinnerSection) {
             cmdList.push({ "bg": red, "cl": second_length });
-          }
+          //}
           cmdList.push({ "bg": black, "cl": second_length });
 
-          if (onWinnerSection) {
+          //if (onWinnerSection) {
             cmdList.push({ "bg": white, "cl": second_length });
-          }
+          //}
           cmdList.push({ "bg": red, "cl": second_length, "sv": true });
 
           cmdList.push({ "bg": black, "cl": second_length });
           cmdList.push({ "bg": white, "cl": second_length });
 
-          if (onWinnerSection) {
+          //if (onWinnerSection) {
             cmdList.push({ "bg": red, "cl": second_length });
-          }
+          //}
           cmdList.push({ "bg": black, "cl": second_length });
 
-          if (onWinnerSection) {
+          //if (onWinnerSection) {
             cmdList.push({ "bg": white, "cl": second_length });
-          }
+          //}
           cmdList.push({ "bg": red, "cl": second_length });
 
           // Commands for winning section
-          if (onWinnerSection) {
+          //if (onWinnerSection) {
             cmdList.push({ "pif": "w", "bg": black, "cl": second_length });
             cmdList.push({ "bg": white, "cl": second_length });
             cmdList.push({ "pif": "w", "bg": red, "cl": second_length });
@@ -195,7 +195,7 @@ exports.create = function (req, res)
             cmdList.push({ "pif": "w", "bg": red, "cl": second_length, "sv": true });
             cmdList.push({ "pif": "w", "bg": black, "cl": second_length });
             cmdList.push({ "pif": "w", "bg": white, "cl": second_length });
-          }
+          //}
         }
 
         // Add this set of commands to the overall list
