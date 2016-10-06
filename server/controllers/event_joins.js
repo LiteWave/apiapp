@@ -95,10 +95,9 @@ exports.create = function (req, res)
           if (!show._winnerId)
           {
             // TODO handle multiple sections.
-            show.winnerSections = UL.userSeat.section;
 
             // Set the first person to join as the winner.
-            event_join._winnerId = show._winnerId;
+            event_join._winnerId = UL._id;
 
             // Save the show so we don't keep picking a winner.
             var seat = 'Section: ' + UL.userSeat.section + '. Row: ' + UL.userSeat.row + '. Seat: ' + UL.userSeat.seat;
