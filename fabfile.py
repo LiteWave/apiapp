@@ -31,13 +31,24 @@ def deploy_prod(branch):
     deploy apiapp to production
     """
     hosts = [
-        #'52.35.158.241', #webmini,
         '52.10.194.211', #web1,
         '52.35.105.39', #web2
         '52.24.246.109' #web3
     ]
     env['branch'] = branch
     env['environment'] = 'production'
+    execute(deploy, hosts=hosts)
+
+@task
+def deploy_stage(branch):
+    """
+    deploy apiapp to staging
+    """
+    hosts = [
+        '52.35.158.241', #webmini,
+    ]
+    env['branch'] = branch
+    env['environment'] = 'staging'
     execute(deploy, hosts=hosts)
 
 def deploy():
@@ -59,6 +70,6 @@ def deploy():
         run('./install.sh')
 
         print colors.cyan('restarting apiapp...')
-        run('./run.sh')
+        run('./run.sh %s' % env['environment'])
         
         print colors.cyan('deploy complete.')
