@@ -121,8 +121,8 @@ exports.create = function (req, res)
 
         if (show.type === 5)
         {
-          randomDelay = Math.floor(Math.random() * 100);
-          cmdList.push({ "ct": "w", "cl": randomDelay });
+          //randomDelay = Math.floor(Math.random() * 100);
+          //cmdList.push({ "ct": "w", "cl": randomDelay });
 
           // Alternate between the two colors. Start with first_length, then subtract 50ms every X number.
           var showLengthTemp = showLengthAdj;
