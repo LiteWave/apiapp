@@ -7,6 +7,7 @@ The api app for Litewave
 Install Node Virtual Environment 
 
 `sudo pip install nodeenv`
+
 `nodeenv env`
 
 Activate your nodeenv:
