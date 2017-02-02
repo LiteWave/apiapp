@@ -93,7 +93,9 @@ exports.create = function (req, res)
       // TODO: remove the hardcoding of subtracting 6 seconds for the contest. If this was a litewave only, don't subtract.
       // See later TODO about putting command creation in a loop for more easily setting the # of commands.
       var columnLength = currentLayout[0].columns.length;
-      var first_length = Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
+      var showLengthAdj = (show.length * 1000) - 3000;
+      var first_length = (show.type === 5) ? 500 : Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
+
       if (first_length < 350)
       {
         first_length = 350;
@@ -104,6 +106,7 @@ exports.create = function (req, res)
       var fourth_length = 250;  // 250 ms
       var firstColLengthMS = columnLength * first_length;  // 11sec
       var secondColLengthMS = columnLength * second_length;  // 5.5sec
+      var shouldVibrate = Math.random() >= 0.5;
 
       while (logicalCol <= columnLength)
       {
@@ -116,8 +119,37 @@ exports.create = function (req, res)
           //onWinnerSection = (currentSection.indexOf(show.winnerSections.toString()) > -1);
         }
 
-        // If a LiteShow
-        if (show.type === 0 || show.type === 1)
+        if (show.type === 5)
+        {
+          //randomDelay = Math.floor(Math.random() * 100);
+          //cmdList.push({ "ct": "w", "cl": randomDelay });
+
+          // Alternate between the two colors. Start with first_length, then subtract 50ms every X number.
+          var showLengthTemp = showLengthAdj;
+          var cmdCount = 0;
+          var cmdLength = first_length;
+          while (showLengthTemp >= 0)
+          {
+            cmdList.push({ "bg": red, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": white, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            //console.log('SHOW:Create: cmdCount=' + cmdCount);
+
+            // Tweak this. every 4 commands seems like too many commands
+            if (cmdCount % 6 == 0 && cmdLength >= 300)
+            {
+              //console.log('SHOW:Create: Reducing cmd length');
+              cmdLength = cmdLength -50;
+            }
+
+            showLengthTemp = showLengthTemp - (cmdLength * 2);
+            //console.log('SHOW:Create: cmdLength=' + cmdLength);
+          }
+        }
+        else if (show.type === 0 || show.type === 1)
         {
           // Wave 1.
           if (logicalCol > 1) {
@@ -136,7 +168,7 @@ exports.create = function (req, res)
           cmdList.push({ "ct": "w", "cl": secondColLengthMS - (second_length * logicalCol) }); // pause 21.750 seconds, 21.5. 21.25, 21
         }
 
-        // If a contest.
+          // If a contest.
         if (show.type >= 1)
         {
           // Common Contest Commands
@@ -188,7 +220,7 @@ exports.create = function (req, res)
             cmdList.push({ "bg": white, "cl": second_length });
             cmdList.push({ "pif": "w", "bg": red, "cl": second_length, "sv": true });
 
-            // push winning command to winner inside of winning section.
+          // push winning command to winner inside of winning section.
             cmdList.push({ "pif": "w", "ct": "win", "bg": red, "cl": second_length });
             cmdList.push({ "pif": "w", "bg": black, "cl": second_length, "sv": true });
             cmdList.push({ "pif": "w", "bg": white, "cl": second_length });
@@ -196,12 +228,14 @@ exports.create = function (req, res)
             cmdList.push({ "pif": "w", "bg": black, "cl": second_length });
             cmdList.push({ "pif": "w", "bg": white, "cl": second_length });
           //}
+
+          //console.log('SHOW:Create: cmdCount=' +cmdCount);
         }
 
-        // Add this set of commands to the overall list
-        cmds.push({ "id": logicalCol - 1, "commandList": cmdList.slice(0) });
+          // Add this set of commands to the overall list
+        cmds.push({ "id": logicalCol -1, "commandList": cmdList.slice(0) });
 
-        // clear out commands.
+          // clear out commands.
         cmdList = [];
 
         logicalCol++;
