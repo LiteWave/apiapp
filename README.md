@@ -32,7 +32,9 @@ Server available at:
 
 ## Deployment
 
-`fab deploy:prod`
+`fab deploy_prod:master`
+
+`fab deploy_stage:master`
 
 Server available at:
 
