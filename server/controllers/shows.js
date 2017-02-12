@@ -121,8 +121,8 @@ exports.create = function (req, res)
 
         if (show.type === 5)
         {
-          randomDelay = Math.floor(Math.random() * 100);
-          cmdList.push({ "ct": "w", "cl": randomDelay });
+          //randomDelay = Math.floor(Math.random() * 100);
+          //cmdList.push({ "ct": "w", "cl": randomDelay });
 
           // Alternate between the two colors. Start with first_length, then subtract 50ms every X number.
           var showLengthTemp = showLengthAdj;
@@ -169,7 +169,7 @@ exports.create = function (req, res)
         }
 
           // If a contest.
-        if (show.type >= 1)
+        if (show.type >= 1 && show.type < 6)
         {
           // Common Contest Commands
           // Generate random delay time between 0 and 100 ms for each logical column.
