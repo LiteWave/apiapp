@@ -32,6 +32,9 @@ Server available at:
 
 ## Deployment
 
+Add your permission file via ssh-add. Otherwise you can't connect to the remote servers.
+Make sure the fab file is updated with the correct list of server IP addresses from AWS. 
+
 `fab deploy_prod:master`
 
 `fab deploy_stage:master`
