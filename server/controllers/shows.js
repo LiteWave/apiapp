@@ -119,7 +119,8 @@ exports.create = function (req, res)
           //onWinnerSection = (currentSection.indexOf(show.winnerSections.toString()) > -1);
         }
 
-        if (show.type === 5)
+        // Strobe commands
+        if (show.type === 5 || show.type === 6)
         {
           //randomDelay = Math.floor(Math.random() * 100);
           //cmdList.push({ "ct": "w", "cl": randomDelay });
