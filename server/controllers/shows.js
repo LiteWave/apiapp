@@ -119,7 +119,8 @@ exports.create = function (req, res)
           //onWinnerSection = (currentSection.indexOf(show.winnerSections.toString()) > -1);
         }
 
-        if (show.type === 5)
+        // Strobe commands
+        if (show.type === 5 || show.type === 6)
         {
           //randomDelay = Math.floor(Math.random() * 100);
           //cmdList.push({ "ct": "w", "cl": randomDelay });
@@ -169,7 +170,7 @@ exports.create = function (req, res)
         }
 
           // If a contest.
-        if (show.type >= 1)
+        if (show.type >= 1 && show.type < 6)
         {
           // Common Contest Commands
           // Generate random delay time between 0 and 100 ms for each logical column.
