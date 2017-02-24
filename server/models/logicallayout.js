@@ -10,10 +10,14 @@ var mongoose = require('mongoose'),
  */
 var LogicalLayoutSchema = new Schema({
   _eventId: { type: Schema.ObjectId, ref: 'Event' },
+  _stadiumId: { type: Schema.ObjectId, ref: 'Stadium' },
   columns: [{   // the length of this equals the number of logical columns
     _id: false,
     id: Number, // logical column id
     sectionList: [{ type: String, trim: true }],  // array of sections that make up this logical column.
+    cl: Number,   // command length in milliseconds
+    bg: String,   // color:  rgb value (255,0,0 for red)
+    sv: Boolean   // phone should vibrate?
   }],
   rows: [{      // the length of this equals the number of logical rows
     _id: false,

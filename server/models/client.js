@@ -9,10 +9,11 @@ var mongoose = require('mongoose'),
  * Client Schema - 
  */
 var ClientSchema = new Schema({
+  externalStadiumId: { type: String, trim: true },
   name: {
     type: String,
     trim: true
-  },
+  },  
   settings: {
     backgroundColor: { type: String, trim: true },
     borderColor: { type: String, trim: true },
