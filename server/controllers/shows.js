@@ -95,16 +95,16 @@ exports.create = function (req, res)
       // See later TODO about putting command creation in a loop for more easily setting the # of commands.
       var columnLength = currentLayout[0].columns.length;
       var showLengthAdj = (show.length * 1000) - 3000;
-      var first_length = (show.type === 5) ? 400: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
+      var first_length = (show.type === 5) ? 500: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
 
       if (first_length < 350)
       {
         first_length = 350;
       }
 
-      var second_length = 250;  // 250 ms
-      var third_length = 250;  // 250 ms
-      var fourth_length = 250;  // 250 ms
+      var second_length = 350;  // 250 ms
+      var third_length = 350;  // 250 ms
+      var fourth_length = 350;  // 250 ms
       var firstColLengthMS = columnLength * first_length;  // 11sec
       var secondColLengthMS = columnLength * second_length;  // 5.5sec
       var shouldVibrate = Math.random() >= 0.5;
@@ -145,14 +145,15 @@ exports.create = function (req, res)
 
             //console.log('SHOW:Create: cmdCount=' + cmdCount);
 
+            showLengthTemp = showLengthTemp - (cmdLength * 3);
+
             // Tweak this. every 4 commands seems like too many commands
-            if (cmdCount % 6 == 0 && cmdLength >= 300)
+            if (cmdCount % 6 == 0 && cmdLength >= 350)
             {
               //console.log('SHOW:Create: Reducing cmd length');
-              cmdLength = cmdLength -50;
+              cmdLength = cmdLength - 50;
             }
-
-            showLengthTemp = showLengthTemp - (cmdLength * 3);
+            
             //console.log('SHOW:Create: cmdLength=' + cmdLength);
           }
         }
