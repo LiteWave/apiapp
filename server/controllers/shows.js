@@ -95,16 +95,16 @@ exports.create = function (req, res)
       // See later TODO about putting command creation in a loop for more easily setting the # of commands.
       var columnLength = currentLayout[0].columns.length;
       var showLengthAdj = (show.length * 1000) - 3000;
-      var first_length = (show.type === 5) ? 500: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
+      var first_length = (show.type === 5) ? 1000: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
 
       if (first_length < 350)
       {
         first_length = 350;
       }
 
-      var second_length = 350;  // 250 ms
-      var third_length = 350;  // 250 ms
-      var fourth_length = 350;  // 250 ms
+      var second_length = 750;  // 250 ms
+      var third_length = 500;  // 250 ms
+      var fourth_length = 400;  // 250 ms
       var firstColLengthMS = columnLength * first_length;  // 11sec
       var secondColLengthMS = columnLength * second_length;  // 5.5sec
       var shouldVibrate = Math.random() >= 0.5;
@@ -130,8 +130,9 @@ exports.create = function (req, res)
           var showLengthTemp = showLengthAdj;
           var cmdCount = 0;
           var cmdLength = first_length;
-          while (showLengthTemp >= 0)
+          while (showLengthTemp >= cmdLength)
           {
+            shouldVibrate = Math.random() >= 0.5;
             cmdList.push({ "bg": red, "cl": cmdLength, "sv": shouldVibrate });
             cmdCount++;
 
@@ -148,10 +149,10 @@ exports.create = function (req, res)
             showLengthTemp = showLengthTemp - (cmdLength * 3);
 
             // Tweak this. every 4 commands seems like too many commands
-            if (cmdCount % 6 == 0 && cmdLength >= 350)
+            if (cmdCount % 3 == 0 && cmdLength >= 400)
             {
               //console.log('SHOW:Create: Reducing cmd length');
-              cmdLength = cmdLength - 50;
+              cmdLength = cmdLength - 100;
             }
             
             //console.log('SHOW:Create: cmdLength=' + cmdLength);
@@ -185,56 +186,56 @@ exports.create = function (req, res)
           // TODO: put in a loop of X number so we easily know how many commands we are adding.
           randomDelay = Math.floor(Math.random() * 100);
           cmdList.push({ "ct": "w", "cl": randomDelay });  // wait X ms, max delay 250ms        
-          cmdList.push({ "bg": grey, "cl": first_length });
-          cmdList.push({ "bg": white, "cl": first_length });
-          cmdList.push({ "bg": red, "cl": first_length });
-          cmdList.push({ "bg": grey, "cl": first_length });
-          cmdList.push({ "bg": white, "cl": first_length });
-          cmdList.push({ "bg": red, "cl": first_length, "sv": true });
-
           cmdList.push({ "bg": grey, "cl": second_length });
           cmdList.push({ "bg": white, "cl": second_length });
+          cmdList.push({ "bg": red, "cl": second_length });
+          cmdList.push({ "bg": grey, "cl": second_length });
+          cmdList.push({ "bg": white, "cl": second_length });
+          cmdList.push({ "bg": red, "cl": second_length, "sv": true });
+
+          cmdList.push({ "bg": grey, "cl": third_length });
+          cmdList.push({ "bg": white, "cl": third_length });
 
           // Take out a few commands from non-winner sections
           //if (onWinnerSection) {
-            cmdList.push({ "bg": red, "cl": second_length });
+            cmdList.push({ "bg": red, "cl": third_length });
           //}
-          cmdList.push({ "bg": grey, "cl": second_length });
+          cmdList.push({ "bg": grey, "cl": third_length });
 
           //if (onWinnerSection) {
-            cmdList.push({ "bg": white, "cl": second_length });
+            cmdList.push({ "bg": white, "cl": third_length });
           //}
-          cmdList.push({ "bg": red, "cl": second_length, "sv": true });
+          cmdList.push({ "bg": red, "cl": third_length, "sv": true });
 
-          cmdList.push({ "bg": grey, "cl": second_length });
-          cmdList.push({ "bg": white, "cl": second_length });
-
-          //if (onWinnerSection) {
-            cmdList.push({ "bg": red, "cl": second_length });
-          //}
-          cmdList.push({ "bg": grey, "cl": second_length });
+          cmdList.push({ "bg": grey, "cl": third_length });
+          cmdList.push({ "bg": white, "cl": third_length });
 
           //if (onWinnerSection) {
-            cmdList.push({ "bg": white, "cl": second_length });
+            cmdList.push({ "bg": red, "cl": third_length });
           //}
-          cmdList.push({ "bg": red, "cl": second_length });
+          cmdList.push({ "bg": grey, "cl": third_length });
+
+          //if (onWinnerSection) {
+            cmdList.push({ "bg": white, "cl": third_length });
+          //}
+          cmdList.push({ "bg": red, "cl": third_length });
 
           // Commands for winning section
           //if (onWinnerSection) {
-            cmdList.push({ "pif": "w", "bg": grey, "cl": second_length });
-            cmdList.push({ "bg": white, "cl": second_length });
-            cmdList.push({ "pif": "w", "bg": red, "cl": second_length });
-            cmdList.push({ "bg": grey, "cl": second_length });
-            cmdList.push({ "bg": white, "cl": second_length });
-            cmdList.push({ "pif": "w", "bg": red, "cl": second_length, "sv": true });
+            cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length });
+            cmdList.push({ "bg": white, "cl": fourth_length });
+            cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length });
+            cmdList.push({ "bg": grey, "cl": fourth_length });
+            cmdList.push({ "bg": white, "cl": fourth_length });
+            cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length, "sv": true });
 
           // push winning command to winner inside of winning section.
-            cmdList.push({ "pif": "w", "ct": "win", "bg": red, "cl": second_length });
-            cmdList.push({ "pif": "w", "bg": grey, "cl": second_length, "sv": true });
-            cmdList.push({ "pif": "w", "bg": white, "cl": second_length });
-            cmdList.push({ "pif": "w", "bg": red, "cl": second_length, "sv": true });
-            cmdList.push({ "pif": "w", "bg": grey, "cl": second_length });
-            cmdList.push({ "pif": "w", "bg": white, "cl": second_length });
+            cmdList.push({ "pif": "w", "ct": "win", "bg": red, "cl": fourth_length });
+            cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length, "sv": true });
+            cmdList.push({ "pif": "w", "bg": white, "cl": fourth_length });
+            cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length, "sv": true });
+            cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length });
+            cmdList.push({ "pif": "w", "bg": white, "cl": first_length });
           //}
 
           //console.log('SHOW:Create: cmdCount=' +cmdCount);
