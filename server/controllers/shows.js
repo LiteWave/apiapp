@@ -79,8 +79,8 @@ exports.create = function (req, res)
 
       var black = "0,0,0";
       var red = "255,0,0";
-      var white = "162,157,176";
-      var grey = "222,218,213";
+      var white = "255,255,255";// "162,157,176";
+      var grey = "162,157,176";
 
       // for each logical column, create commands
       // NOTE:this is simple logic. Need to account for logical rows and seats.  22
