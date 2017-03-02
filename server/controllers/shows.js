@@ -130,7 +130,7 @@ exports.create = function (req, res)
           var showLengthTemp = showLengthAdj;
           var cmdCount = 0;
           var cmdLength = first_length;
-          while (showLengthTemp >= cmdLength)
+          while (showLengthTemp >= cmdLength && cmdLength >= 400)
           {
             shouldVibrate = Math.random() >= 0.5;
             cmdList.push({ "bg": red, "cl": cmdLength, "sv": shouldVibrate });
@@ -152,7 +152,7 @@ exports.create = function (req, res)
             if (cmdCount % 3 == 0 && cmdLength >= 400)
             {
               //console.log('SHOW:Create: Reducing cmd length');
-              cmdLength = cmdLength - 100;
+              cmdLength = cmdLength - 150;
             }
             
             //console.log('SHOW:Create: cmdLength=' + cmdLength);
