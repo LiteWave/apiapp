@@ -94,8 +94,8 @@ exports.create = function (req, res)
       // TODO: remove the hardcoding of subtracting 6 seconds for the contest. If this was a litewave only, don't subtract.
       // See later TODO about putting command creation in a loop for more easily setting the # of commands.
       var columnLength = currentLayout[0].columns.length;
-      var showLengthAdj = (show.length * 1000) - 3000;
-      var first_length = (show.type === 5) ? 1000: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
+      var pulseLength = (show.pulseLength * 1000);
+      var first_length = (show.type === 5 || show.type === 6) ? 1000: Math.ceil(((show.length - 6) * 1000) / columnLength);  //  first was 350 ms
 
       if (first_length < 350)
       {
@@ -127,7 +127,7 @@ exports.create = function (req, res)
           //cmdList.push({ "ct": "w", "cl": randomDelay });
 
           // Alternate between the two colors. Start with first_length, then subtract 50ms every X number.
-          var showLengthTemp = showLengthAdj;
+          var showLengthTemp = pulseLength;
           var cmdCount = 0;
           var cmdLength = first_length;
           while (showLengthTemp >= cmdLength && cmdLength >= 400)
@@ -144,19 +144,77 @@ exports.create = function (req, res)
             cmdList.push({ "bg": grey, "cl": cmdLength, "sv": shouldVibrate });
             cmdCount++;
 
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": white, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
             //console.log('SHOW:Create: cmdCount=' + cmdCount);
 
-            showLengthTemp = showLengthTemp - (cmdLength * 3);
+            showLengthTemp = showLengthTemp - (cmdLength * 4);
 
             // Tweak this. every 4 commands seems like too many commands
-            if (cmdCount % 3 == 0 && cmdLength >= 400)
+            if (cmdCount % 4 == 0 && cmdLength >= 400)
             {
               //console.log('SHOW:Create: Reducing cmd length');
               cmdLength = cmdLength - 150;
             }
-            
             //console.log('SHOW:Create: cmdLength=' + cmdLength);
           }
+
+          randomDelay = Math.floor(Math.random() * 100);
+          cmdList.push({ "ct": "w", "cl": randomDelay });  // wait X ms, max delay 250ms        
+
+          var contestLength = (show.length - 5) * 1000;
+          cmdCount = 0;
+          cmdLength = first_length;
+          while (contestLength >= cmdLength && cmdLength >= 400)
+          {
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": red, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": white, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": grey, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": white, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": red, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            shouldVibrate = Math.random() >= 0.5;
+            cmdList.push({ "bg": grey, "cl": cmdLength, "sv": shouldVibrate });
+            cmdCount++;
+
+            contestLength = contestLength - (cmdLength * 6);
+
+            if (cmdCount % 6 == 0 && cmdLength >= 400)
+            {
+              cmdLength = cmdLength - 125;
+            }
+          }
+
+          cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length });
+          cmdList.push({ "bg": white, "cl": fourth_length });
+          cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length });
+          cmdList.push({ "bg": grey, "cl": fourth_length });
+          cmdList.push({ "bg": white, "cl": fourth_length });
+          cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length, "sv": true });
+
+          // push winning command to winner inside of winning section.
+          cmdList.push({ "pif": "w", "ct": "win", "bg": red, "cl": fourth_length });
+          cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length, "sv": true });
+          cmdList.push({ "pif": "w", "bg": white, "cl": fourth_length });
+          cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length, "sv": true });
+          cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length });
+          cmdList.push({ "pif": "w", "bg": white, "cl": first_length });
         }
         else if (show.type === 0 || show.type === 1)
         {
@@ -177,8 +235,8 @@ exports.create = function (req, res)
           cmdList.push({ "ct": "w", "cl": secondColLengthMS - (second_length * logicalCol) }); // pause 21.750 seconds, 21.5. 21.25, 21
         }
 
-          // If a contest.
-        if (show.type >= 1 && show.type < 6)
+        // If a contest.
+        if (show.type >= 1 && show.type < 5)
         {
           // Common Contest Commands
           // Generate random delay time between 0 and 100 ms for each logical column.
