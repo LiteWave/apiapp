@@ -190,7 +190,7 @@ exports.create = function (req, res)
             cmdCount++;
 
             shouldVibrate = Math.random() >= 0.5;
-            cmdList.push({ "bg": grey, "cl": cmdLength, "sv": shouldVibrate });
+            cmdList.push({ "pif": "w", "bg": grey, "cl": cmdLength, "sv": shouldVibrate });
             cmdCount++;
 
             contestLength = contestLength - (cmdLength * 6);
@@ -214,7 +214,7 @@ exports.create = function (req, res)
           cmdList.push({ "pif": "w", "bg": white, "cl": fourth_length });
           cmdList.push({ "pif": "w", "bg": red, "cl": fourth_length, "sv": true });
           cmdList.push({ "pif": "w", "bg": grey, "cl": fourth_length });
-          cmdList.push({ "pif": "w", "bg": white, "cl": first_length });
+          cmdList.push({ "pif": "w", "bg": white, "cl": first_length * 2});
         }
         else if (show.type === 0 || show.type === 1)
         {
