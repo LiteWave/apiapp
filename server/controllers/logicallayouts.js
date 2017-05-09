@@ -27,6 +27,28 @@ exports.create = function (req, res)
 {
   var logicallayout = new LogicalLayout(req.body);
   logicallayout._eventId = req.params.eventId;
+
+  logicallayout.save(function (err)
+  {
+    if (err)
+    {
+      console.log('LogicalLayout:Create:err=' + err);
+      return res.send('shows/', {
+        errors: err.errors,
+        logicallayout: logicallayout
+      });
+    } else
+    {
+      res.jsonp(logicallayout);
+    }
+  });
+};
+
+exports.createforstadium = function (req, res)
+{
+  var logicallayout = new LogicalLayout(req.body);
+  logicallayout._stadiumId = req.params.stadiumId;
+
   logicallayout.save(function (err)
   {
     if (err)
