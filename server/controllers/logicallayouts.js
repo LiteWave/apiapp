@@ -109,11 +109,12 @@ exports.show = function (req, res)
 };
 
 /**
- * List of Shows for an Event 
+ * List of Layouts for a stadium
  */
 exports.all = function (req, res)
 {
-  LogicalLayout.find({ _eventId: req.event._id }).exec(function (err, logicallayouts)
+  //LogicalLayout.find({ _eventId: req.event._id }).exec(function (err, logicallayouts)  { _stadiumId: req.stadium._id }
+  LogicalLayout.find().exec(function (err, logicallayouts)
   {
     if (err)
     {
