@@ -43,7 +43,7 @@ UserLocationSchema.methods = {
    */
   updateLogicalSeat: function (layout)
   {
-    if (!layout.columns || !layout.columns.length)
+    if (layout == null || !layout.columns || !layout.columns.length)
     {
       return -1;
     }

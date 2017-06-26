@@ -33,6 +33,7 @@ exports.user_location = function (req, res, next, id)
  */
 exports.create = function (req, res)
 {
+  var layoutId = null;
   UserLocation.findOne({
     _eventId: req.params.eventId,
     "userSeat.level": req.body.userSeat.level, "userSeat.section" : req.body.userSeat.section, "userSeat.row" : req.body.userSeat.row, "userSeat.seat" : req.body.userSeat.seat
@@ -66,52 +67,68 @@ exports.create = function (req, res)
       //console.log('UL:Create:No UL. Creating new UL with ' + req.body.userKey);
     }
 
-    LogicalLayout.findOne({ _eventId: req.params.eventId }).exec(function (err, layout)
+    // Look up the Layout by loading this Event. This is to keep the Event Id Separate from the Layout.
+    Event.findOne({ _id: req.params.eventId }).exec(function (err, event)
     {
       if (err)
       {
-        console.log('UL:Create:Some kind of error on finding Layout: ' + err);
+        console.log('UL:Create:Some kind of error on finding Event: ' + err);
         return res.status(400).jsonp(err);
       }
 
-      var user_location = new UserLocation(req.body);
-      user_location._eventId = req.params.eventId;
+      layoutId = event._logicalLayoutId;
+      console.log('UL:event._logicalLayoutId: ' + event._logicalLayoutId);
 
-      if (!user_location.updateLogicalSeat(layout))
-      {
-        console.log('UL:Create:Error setting logical seat. Defaulting to 1 and 1.');
-        this.logicalCol = 1;
-        this.logicalRow = 1;
-      }
-
-      //  we are seeing if the time that the mobile app has is different than the server.  The problem is that the time to post
-      //   to the server is different depending on the phone, so the time offset is actually varied enough due to this posting that
-      //   it makes the show visibly inaccurate.   Assuming all cell phones have the same time, then really what we are trying to 
-      //    accomplish here is to take into account phones that are in different time zones, so if the calculated offset is less than 1 
-      //    second, we set the offset to 0.  If some day we have a better way to deal with these offsets, then we can do it here.
-      var mobile_time_offset = 0;
-      if (req.body.mobileTime)
-      {
-        var curTime = new Date();
-        var curUTCTime = curTime.getTime() - (curTime.getTimezoneOffset() * 60000);  // convert to GMT time offset
-
-        var mobile_date = new Date(req.body.mobileTime);
-        var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
-        mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
-        user_location.mobileTimeOffset = mobile_time_offset;
-      }
-
-      user_location.save(function (err, UL)
+      LogicalLayout.findOne({ _id: layoutId }).exec(function (err, layout)
       {
         if (err)
         {
-          console.log('UL:Create:Error saving UL. err: ' + err);
+          console.log('UL:Create:Some kind of error on finding Layout: ' + err);
           return res.status(400).jsonp(err);
         }
-        else
+
+        var user_location = new UserLocation(req.body);
+        user_location._eventId = req.params.eventId;
+
+        console.log('UL:user_location._eventId: ' + user_location._eventId);
+        console.log('UL:layout: ' + layout);
+
+        if (!user_location.updateLogicalSeat(layout))
         {
-          res.jsonp(UL);
+          console.log('UL:Create:Error setting logical seat. Defaulting to 1 and 1.');
+          this.logicalCol = 1;
+          this.logicalRow = 1;
         }
+
+        //  we are seeing if the time that the mobile app has is different than the server.  The problem is that the time to post
+        //   to the server is different depending on the phone, so the time offset is actually varied enough due to this posting that
+        //   it makes the show visibly inaccurate.   Assuming all cell phones have the same time, then really what we are trying to 
+        //    accomplish here is to take into account phones that are in different time zones, so if the calculated offset is less than 1 
+        //    second, we set the offset to 0.  If some day we have a better way to deal with these offsets, then we can do it here.
+        var mobile_time_offset = 0;
+        if (req.body.mobileTime)
+        {
+          var curTime = new Date();
+          var curUTCTime = curTime.getTime() - (curTime.getTimezoneOffset() * 60000);  // convert to GMT time offset
+
+          var mobile_date = new Date(req.body.mobileTime);
+          var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
+          mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
+          user_location.mobileTimeOffset = mobile_time_offset;
+        }
+
+        user_location.save(function (err, UL)
+        {
+          if (err)
+          {
+            console.log('UL:Create:Error saving UL. err: ' + err);
+            return res.status(400).jsonp(err);
+          }
+          else
+          {
+            res.jsonp(UL);
+          }
+        });
       });
     });
   });
