@@ -36,7 +36,8 @@ exports.create = function (req, res)
   var layoutId = null;
   UserLocation.findOne({
     _eventId: req.params.eventId,
-    "userSeat.level": req.body.userSeat.level, "userSeat.section" : req.body.userSeat.section, "userSeat.row" : req.body.userSeat.row, "userSeat.seat" : req.body.userSeat.seat
+    "userSeat.section" : req.body.userSeat.section
+    //"userSeat.level": req.body.userSeat.level, "userSeat.section" : req.body.userSeat.section, "userSeat.row" : req.body.userSeat.row, "userSeat.seat" : req.body.userSeat.seat
   }).exec(function (err, user_location)
   {
     if (err)
@@ -47,6 +48,8 @@ exports.create = function (req, res)
 
     if (user_location != null)
     {
+      console.log('UL:Create:Info: Found a user already in this section.');
+
       // Check if this user is rejoining or someone is trying to take someone else's seat.
       /*if (req.body.userKey.localeCompare(user_location.userKey) != 0)
       {
@@ -58,12 +61,13 @@ exports.create = function (req, res)
       // Found an existing user who is rejoining. Log a message that we are reusing the UL.
       //console.log('UL:Create:Info: Reusing userLocation with userKey=' + req.body.userKey);
 
-      user_location.delete;
-      user_location = null;
+      //user_location.delete;
+      //user_location = null;
     }
     else
     {
       // Brand new user joining.
+      console.log('UL:Create:Info: New user to this section.');
       //console.log('UL:Create:No UL. Creating new UL with ' + req.body.userKey);
     }
 
@@ -87,13 +91,20 @@ exports.create = function (req, res)
           return res.status(400).jsonp(err);
         }
 
-        var user_location = new UserLocation(req.body);
-        user_location._eventId = req.params.eventId;
+        var userLocation = new UserLocation(req.body);
+        userLocation._eventId = req.params.eventId;
 
-        console.log('UL:user_location._eventId: ' + user_location._eventId);
+        // V2 - ignore input row and seat and generate a random string (# of ms since 1970, Date.now() requires > IE9
+        if (!userLocation.userSeat.seat)
+        {
+          userLocation.userSeat.seat = Date.now().toString();
+        }
+
+        console.log('UL:userLocation._eventId: ' + userLocation._eventId);
         console.log('UL:layout: ' + layout);
+        console.log('userLocation.userSeat.seat: ' + userLocation.userSeat.seat);
 
-        if (!user_location.updateLogicalSeat(layout))
+        if (!userLocation.updateLogicalSeat(layout))
         {
           console.log('UL:Create:Error setting logical seat. Defaulting to 1 and 1.');
           this.logicalCol = 1;
@@ -114,10 +125,10 @@ exports.create = function (req, res)
           var mobile_date = new Date(req.body.mobileTime);
           var mobile_timezone_offset = mobile_date.getTimezoneOffset() * 60000;
           mobile_time_offset = mobile_date.getTime() - mobile_timezone_offset - curUTCTime;
-          user_location.mobileTimeOffset = mobile_time_offset;
+          userLocation.mobileTimeOffset = mobile_time_offset;
         }
 
-        user_location.save(function (err, UL)
+        userLocation.save(function (err, UL)
         {
           if (err)
           {
